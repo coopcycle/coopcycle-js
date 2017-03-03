@@ -4,6 +4,21 @@ function Client(httpBaseURL, model) {
   if (this.model) console.log(this.model.token)
 }
 
+Client.prototype.createRequest = function(method, uri, data) {
+  var headers = new Headers();
+  headers.append("Content-Type", "application/json");
+
+  var options = {
+    method: method,
+    headers: headers,
+  }
+  if (data) {
+    options.body = JSON.stringify(data)
+  }
+
+  return new Request(this.httpBaseURL + uri, options);
+}
+
 Client.prototype.createAuthorizedRequest = function(method, uri, data) {
   var headers = new Headers();
   headers.append("Authorization", "Bearer " + this.model.token);
@@ -22,20 +37,20 @@ Client.prototype.createAuthorizedRequest = function(method, uri, data) {
 
 Client.prototype.request = function(method, uri, data) {
   console.log(method + ' ' + uri);
-  var req = this.createAuthorizedRequest(method, uri, data);
+  var req = this.model ? this.createAuthorizedRequest('GET', uri, data) : this.createRequest('GET', uri, data);
   return this.fetch(req);
 }
 
 Client.prototype.get = function(uri, data) {
-  console.log('GET ' + uri);
-  var req = this.createAuthorizedRequest('GET', uri, data);
-  return this.fetch(req);
+  return this.request('GET', uri, data);
+}
+
+Client.prototype.post = function(uri, data) {
+  return this.request('POST', uri, data);
 }
 
 Client.prototype.put = function(uri, data) {
-  console.log('PUT ' + uri);
-  var req = this.createAuthorizedRequest('PUT', uri, data);
-  return this.fetch(req);
+  return this.request('PUT', uri, data);
 }
 
 Client.prototype.fetch = function(req) {
