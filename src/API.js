@@ -28,8 +28,11 @@ Client.prototype.createAuthorizedRequest = function(method, uri, data) {
     method: method,
     headers: headers,
   }
-  if (data) {
+  if (data && typeof data === 'object') {
     options.body = JSON.stringify(data)
+  }
+  if (data && typeof data === 'string') {
+    options.body = data
   }
 
   return new Request(this.httpBaseURL + uri, options);
@@ -37,7 +40,7 @@ Client.prototype.createAuthorizedRequest = function(method, uri, data) {
 
 Client.prototype.request = function(method, uri, data) {
   console.log(method + ' ' + uri);
-  var req = this.model ? this.createAuthorizedRequest('GET', uri, data) : this.createRequest('GET', uri, data);
+  var req = this.model ? this.createAuthorizedRequest(method, uri, data) : this.createRequest(method, uri, data);
   return this.fetch(req);
 }
 
@@ -94,10 +97,13 @@ Client.prototype.fetch = function(req) {
 Client.prototype.login = function(username, password) {
   return login(this.httpBaseURL, username, password)
     .then((credentials) => {
-      this.model.username = username;
-      this.model.token = credentials.token;
-      this.model.refreshToken = credentials.refresh_token;
-      this.model.roles = credentials.roles;
+
+      Object.assign(this.model, {
+        username: username,
+        token: credentials.token,
+        refreshToken: credentials.refresh_token,
+        roles: credentials.roles,
+      });
 
       return this.model.save();
     });
@@ -146,7 +152,6 @@ var refreshToken = function(baseURL, refreshToken) {
 }
 
 module.exports = {
-  login: login,
   createClient: function(httpBaseURL, model) {
     return new Client(httpBaseURL, model);
   }
