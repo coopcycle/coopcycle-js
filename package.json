@@ -2,9 +2,9 @@
   "name": "coopcycle-js",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/coopcycle.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "example": "webpack-dev-server --content-base=example/"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,18 @@
   },
   "homepage": "https://github.com/coopcycle/coopcycle-js",
   "dependencies": {
-    "es6-promise": "^4.0.5",
-    "isomorphic-fetch": "^2.2.1"
+    "whatwg-fetch": "^2.0.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "react": "^15.6.0",
+    "react-bootstrap": "^0.31.0",
+    "react-dom": "^15.6.0",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^1.16.2"
   }
 }
