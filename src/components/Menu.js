@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Row, Col, Panel } from 'react-bootstrap';
 import _ from 'lodash';
 
 class Menu extends Component {
@@ -29,7 +29,7 @@ class Menu extends Component {
   renderSection(name, products) {
     return (
       <div key={ name }>
-        <h3>{ name }</h3>
+        <h4 className="text-center">{ name }</h4>
         <ListGroup>
         { products.map((product) =>
           <ListGroupItem key={ product['@id'] }>
@@ -50,9 +50,20 @@ class Menu extends Component {
     }
 
     return (
-      <div>
-      { _.map(this.state.sections, (products, name) => this.renderSection(name, products)) }
-      </div>
+      <Row>
+        <Col md={4}>
+          <ListGroup>
+          { _.map(this.state.sections, (products, name) =>
+            <ListGroupItem key={ name }>
+            { name }
+            </ListGroupItem>
+          ) }
+          </ListGroup>
+        </Col>
+        <Col md={8}>
+        { _.map(this.state.sections, (products, name) => this.renderSection(name, products)) }
+        </Col>
+      </Row>
     )
   }
 }
