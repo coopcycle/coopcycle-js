@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import _ from 'lodash';
 
 class Menu extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      products: [],
+      sections: {},
       loading: false,
     };
   }
@@ -16,12 +17,28 @@ class Menu extends Component {
     this.props.client.get('/api/restaurants/' + this.props.restaurantId)
       .then((response) => {
         const products = response.products;
-        this.setState({ loading: false, products: products });
+        const sections = _.groupBy(products, product => product.recipeCategory)
+        this.setState({ loading: false, sections: sections });
       })
       .catch((err) => {
         console.log(err)
         this.setState({ loading: false });
       })
+  }
+
+  renderSection(name, products) {
+    return (
+      <div key={ name }>
+        <h3>{ name }</h3>
+        <ListGroup>
+        { products.map((product) =>
+          <ListGroupItem key={ product['@id'] }>
+          { product.name } <span className="pull-right">{ product.price } €</span>
+          </ListGroupItem>
+        ) }
+        </ListGroup>
+      </div>
+    )
   }
 
   render() {
@@ -33,9 +50,9 @@ class Menu extends Component {
     }
 
     return (
-      <ListGroup>{this.state.products.map((product) =>
-        <ListGroupItem key={ product['@id'] }>{ product.name }</ListGroupItem>
-      )}</ListGroup>
+      <div>
+      { _.map(this.state.sections, (products, name) => this.renderSection(name, products)) }
+      </div>
     )
   }
 }
