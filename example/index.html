@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Coopcycle Client Lib Demo</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+        <style>
+        body {
+          padding-top: 40px;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="app"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react-dom.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.31.0/react-bootstrap.js"></script>
+        <script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
+        <script src="/coopcycle.js" type="application/javascript"></script>
+        <script type="text/babel">
+
+        const { Grid, Row, Col } = ReactBootstrap;
+
+        const client = new Coopcycle.Client('https://toulouse.coopcycle.org');
+
+        class App extends React.Component {
+          render() {
+            return (
+              <Grid>
+                <Row className="show-grid">
+                  <Col md={8}>
+                    <h2>Menu</h2>
+                    <Coopcycle.Menu restaurantId="2" client={ client } />
+                  </Col>
+                  <Col md={4}>
+                    <Coopcycle.LoginForm client={ client } />
+                  </Col>
+                </Row>
+              </Grid>
+            )
+          }
+        }
+
+        ReactDOM.render(<App client={ client } />, document.querySelector('#app'));
+
+      </script>
+    </body>
+</html>
