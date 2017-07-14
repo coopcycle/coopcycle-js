@@ -1,30 +1,11 @@
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem, Row, Col, Panel } from 'react-bootstrap';
 import _ from 'lodash';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux'
+import { addToCart } from '../actions'
 
 class Menu extends Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      sections: {},
-      loading: false,
-    };
-  }
-
-  componentDidMount() {
-    this.setState({ loading: true })
-    this.props.client.get('/api/restaurants/' + this.props.restaurantId)
-      .then((response) => {
-        const products = response.products;
-        const sections = _.groupBy(products, product => product.recipeCategory)
-        this.setState({ loading: false, sections: sections });
-      })
-      .catch((err) => {
-        console.log(err)
-        this.setState({ loading: false });
-      })
-  }
 
   renderSection(name, products) {
     return (
@@ -32,7 +13,7 @@ class Menu extends Component {
         <h4 className="text-center">{ name }</h4>
         <ListGroup>
         { products.map((product) =>
-          <ListGroupItem key={ product['@id'] }>
+          <ListGroupItem key={ product['@id'] } onClick={() => { this.props.actions.addToCart(product) }}>
           { product.name } <span className="pull-right">{ product.price } €</span>
           </ListGroupItem>
         ) }
@@ -43,17 +24,11 @@ class Menu extends Component {
 
   render() {
 
-    if (this.state.loading) {
-      return (
-        <div>Chargement...</div>
-      )
-    }
-
     return (
       <Row>
         <Col md={4}>
           <ListGroup>
-          { _.map(this.state.sections, (products, name) =>
+          { _.map(this.props.sections, (products, name) =>
             <ListGroupItem key={ name }>
             { name }
             </ListGroupItem>
@@ -61,11 +36,28 @@ class Menu extends Component {
           </ListGroup>
         </Col>
         <Col md={8}>
-        { _.map(this.state.sections, (products, name) => this.renderSection(name, products)) }
+        { _.map(this.props.sections, (products, name) => this.renderSection(name, products)) }
         </Col>
       </Row>
     )
   }
 }
 
-export default Menu
+function mapStateToProps(state, props) {
+
+  const sections = _.groupBy(state.products, product => product.recipeCategory)
+
+  return {
+    client: state.client,
+    restaurantId: state.restaurantId,
+    sections,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({ addToCart }, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Menu)
