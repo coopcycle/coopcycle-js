@@ -58,20 +58,24 @@ const restaurantId = (state = null, action) => {
   }
 }
 
-const user = (state = null, action) => {
+const credentials = (state = null, action) => {
   switch (action.type) {
     case 'AUTHENTICATION_SUCCESS':
-      return action.user;
+      return action.credentials;
+    case 'DISCONNECT':
+      return null;
     default:
       return state
   }
 }
 
-const addresses = (state = [], action) => {
+const user = (state = null, action) => {
   switch (action.type) {
     case 'INITIALIZE':
-    case 'LOAD_ADDRESSES_SUCCESS':
-      return action.addresses || [];
+    case 'AUTHENTICATION_SUCCESS':
+      return action.user;
+    case 'DISCONNECT':
+      return null;
     default:
       return state
   }
@@ -135,8 +139,8 @@ export default combineReducers({
   cartAddress,
   client,
   restaurantId,
+  credentials,
   user,
-  addresses,
   authenticationRequest,
   createOrderRequest,
   products

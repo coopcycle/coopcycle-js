@@ -8,8 +8,8 @@ import { removeFromCart } from '../actions'
 
 class Cart extends Component {
 
-  constructor(props) {
-    super(props);
+  onButtonClick() {
+    this.props.history.push(this.props.isAuthenticated ? '/checkout' : '/authenticate')
   }
 
   renderCartItems() {
@@ -29,13 +29,19 @@ class Cart extends Component {
     )
   }
 
+  renderButton() {
+    const buttonDisabled = this.props.cartItems.length === 0;
+
+    return (
+      <Button disabled={ buttonDisabled } bsStyle="primary" block onClick={ this.onButtonClick.bind(this) }>Commander</Button>
+    )
+  }
+
   render() {
 
     const title = (
       <h3>Panier</h3>
     );
-
-    const buttonDisabled = this.props.cartItems.length === 0;
 
     return (
       <Panel className="cart" header={title}>
@@ -46,7 +52,7 @@ class Cart extends Component {
         <p>
           <strong>Total : { this.props.total } €</strong>
         </p>
-        { !this.props.readonly && <Button disabled={ buttonDisabled } bsStyle="primary" block onClick={ () => this.props.history.push('/authenticate') }>Commander</Button> }
+        { !this.props.readonly && this.renderButton() }
       </Panel>
     )
   }
@@ -59,7 +65,8 @@ function mapStateToProps(state, props) {
 
   return {
     cartItems: cartItems,
-    total: total
+    total: total,
+    isAuthenticated: !!state.user
   };
 }
 

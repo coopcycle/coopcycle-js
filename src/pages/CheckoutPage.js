@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { Cart, AddressPicker } from '../components'
+import { Cart, AddressPicker, Navbar } from '../components'
 
 const CheckoutPage = () => {
   return (
     <Grid>
+      <Navbar />
       <Row>
         <Col md={8} mdOffset={2}>
           <Cart readonly />

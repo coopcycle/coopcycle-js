@@ -4,6 +4,7 @@ import LoginForm from './LoginForm'
 import Cart from './Cart'
 import AddressPicker from './AddressPicker'
 import CreditCardForm from './CreditCardForm'
+import Navbar from './Navbar'
 
 module.exports = {
   Menu,
@@ -12,4 +13,5 @@ module.exports = {
   Cart,
   AddressPicker,
   CreditCardForm,
+  Navbar,
 }

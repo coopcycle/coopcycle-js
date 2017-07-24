@@ -17,8 +17,8 @@ const loadCartAddress = () => {
   return localforage.getItem('cartAddress')
 }
 
-const loadAddresses = () => {
-  return localforage.getItem('addresses')
+const loadUser = () => {
+  return localforage.getItem('user')
 }
 
 const loadProducts = (client, restaurantId) => {
@@ -31,10 +31,10 @@ export const initialize = (baseURL, restaurantId) => (dispatch, getState) => {
     .then(credentials => {
       const client = new Client(baseURL, credentials)
 
-      Promise.all([ loadCartItems(), loadCartAddress(), loadAddresses(), loadProducts(client, restaurantId) ])
+      Promise.all([ loadProducts(client, restaurantId), loadCartItems(), loadCartAddress(), loadUser() ])
         .then(values => {
-          const [ cartItems, cartAddress, addresses, products ] = values;
-          dispatch({ type: 'INITIALIZE', client, restaurantId, cartItems, cartAddress, addresses, products })
+          const [ products, cartItems, cartAddress, user ] = values;
+          dispatch({ type: 'INITIALIZE', client, restaurantId, cartItems, cartAddress, user, products })
         })
     })
 }
@@ -43,14 +43,19 @@ export const authenticate = (username, password) => (dispatch, getState) => {
   dispatch({ type: 'AUTHENTICATION_REQUEST' });
   getState().client
     .login(username, password)
-    .then(user => {
+    .then(credentials => {
       getState().client.get('/api/me')
-        .then(me => {
-          dispatch({ type: 'LOAD_ADDRESSES_SUCCESS', addresses: me.addresses })
-          dispatch({ type: 'AUTHENTICATION_SUCCESS', user })
+        .then(user => {
+          dispatch({ type: 'AUTHENTICATION_SUCCESS', user, credentials })
         })
     })
     .catch(err => dispatch({ type: 'AUTHENTICATION_FAILURE' }))
+}
+
+export const disconnect = (username, password) => (dispatch, getState) => {
+  localforage.removeItem('user')
+    .then(() => localforage.removeItem('credentials'))
+    .then(() => dispatch({ type: 'DISCONNECT' }))
 }
 
 export const pickAddress = (address) => {

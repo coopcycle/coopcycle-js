@@ -14,8 +14,8 @@ store.subscribe(() => {
   const state = store.getState();
   localforage.setItem('cartItems', state.cartItems)
   localforage.setItem('cartAddress', state.cartAddress)
+  localforage.setItem('credentials', state.credentials)
   localforage.setItem('user', state.user)
-  localforage.setItem('addresses', state.addresses)
 })
 
 export default store
