@@ -52,7 +52,7 @@ class AddressPicker extends Component {
 function mapStateToProps(state, props) {
   return {
     cartAddress: state.cartAddress,
-    addresses: state.user.addresses,
+    addresses: state.user ? state.user.addresses : [],
   };
 }
 

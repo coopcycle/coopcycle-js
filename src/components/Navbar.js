@@ -23,6 +23,13 @@ class Navbar_ extends Component {
           </Navbar.Brand>
         </Navbar.Header>
         <Navbar.Collapse>
+          <Nav>
+            <NavItem>Panier</NavItem>
+            <NavItem>›</NavItem>
+            <NavItem style={{ opacity: this.props.step < 2 ? 0.5 : 1 }}>Adresse</NavItem>
+            <NavItem>›</NavItem>
+            <NavItem style={{ opacity: this.props.step < 3 ? 0.5 : 1 }}>Paiement</NavItem>
+          </Nav>
           <Nav pullRight>
             <NavItem><strong>Total</strong>  { this.props.total } €</NavItem>
             <NavItem href="#">{ isAuthenticated ? this.props.user.username : "Vous n'êtes pas connecté" }</NavItem>

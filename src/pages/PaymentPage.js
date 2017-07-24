@@ -6,7 +6,7 @@ import { Elements } from 'react-stripe-elements';
 const PaymentPage = () => {
   return (
     <Grid>
-      <Navbar />
+      <Navbar step={3} />
       <Row>
         <Col md={8} mdOffset={2}>
           <Elements>

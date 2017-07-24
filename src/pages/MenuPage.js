@@ -5,7 +5,7 @@ import { Menu, Navbar, Cart } from '../components'
 const MenuPage = () => {
   return (
     <Grid>
-      <Navbar />
+      <Navbar step={1} />
       <Row>
         <Col md={8}>
           <Menu />
