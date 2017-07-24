@@ -10,7 +10,7 @@ class Menu extends Component {
   renderSection(name, products) {
     return (
       <div key={ name }>
-        <h4 className="text-center">{ name }</h4>
+        <h4>{ name }</h4>
         <ListGroup>
         { products.map((product) =>
           <ListGroupItem key={ product['@id'] } onClick={() => { this.props.actions.addToCart(product) }}>
@@ -23,22 +23,10 @@ class Menu extends Component {
   }
 
   render() {
-
     return (
-      <Row>
-        <Col md={4}>
-          <ListGroup>
-          { _.map(this.props.sections, (products, name) =>
-            <ListGroupItem key={ name }>
-            { name }
-            </ListGroupItem>
-          ) }
-          </ListGroup>
-        </Col>
-        <Col md={8}>
-        { _.map(this.props.sections, (products, name) => this.renderSection(name, products)) }
-        </Col>
-      </Row>
+      <div>
+      { _.map(this.props.sections, (products, name) => this.renderSection(name, products)) }
+      </div>
     )
   }
 }

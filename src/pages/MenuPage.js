@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { Menu, Cart } from '../components'
+import { Menu, MenuSections, Cart } from '../components'
 
 const MenuPage = () => {
   return (
