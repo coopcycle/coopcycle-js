@@ -1,12 +1,14 @@
 import MenuPage from './MenuPage'
-import AuthPage from './AuthPage'
+import LoginPage from './LoginPage'
 import CheckoutPage from './CheckoutPage'
 import PaymentPage from './PaymentPage'
 import ConfirmPage from './ConfirmPage'
+import RegisterPage from './RegisterPage'
 
 module.exports = {
   MenuPage,
-  AuthPage,
+  LoginPage,
+  RegisterPage,
   CheckoutPage,
   PaymentPage,
   ConfirmPage,

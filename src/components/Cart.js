@@ -9,7 +9,7 @@ import { removeFromCart } from '../actions'
 class Cart extends Component {
 
   onButtonClick() {
-    this.props.history.push(this.props.isAuthenticated ? '/checkout' : '/authenticate')
+    this.props.history.push(this.props.isAuthenticated ? '/checkout' : '/login')
   }
 
   renderCartItems() {

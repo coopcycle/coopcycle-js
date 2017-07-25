@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { LoginForm, Navbar } from '../components'
 
-const AuthPage = () => {
+const LoginPage = () => {
   return (
     <Grid>
-      <Navbar />
+      <Navbar step={2} />
       <Row>
-        <Col md={4} mdOffset={4}>
+        <Col md={6} mdOffset={3}>
           <LoginForm />
         </Col>
       </Row>
@@ -15,4 +15,4 @@ const AuthPage = () => {
   )
 }
 
-export default AuthPage
+export default LoginPage

@@ -11,6 +11,12 @@ class Navbar_ extends Component {
     this.props.actions.disconnect()
   }
 
+  onClickBreadcrumb(step, path) {
+    if (this.props.step > step) {
+      this.props.history.push(path);
+    }
+  }
+
   render() {
 
     const isAuthenticated = !!this.props.user
@@ -19,16 +25,21 @@ class Navbar_ extends Component {
       <Navbar fluid>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#">Restaurant</a>
+            <a>Restaurant</a>
           </Navbar.Brand>
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <NavItem>Panier</NavItem>
+            <NavItem
+              onClick={ () => this.props.history.push('/') }>Panier</NavItem>
             <NavItem>›</NavItem>
-            <NavItem style={{ opacity: this.props.step < 2 ? 0.5 : 1 }}>Adresse</NavItem>
+            <NavItem style={{ opacity: this.props.step < 2 ? 0.5 : 1 }}
+              onClick={ this.onClickBreadcrumb.bind(this, 3, '/checkout') }>Connexion</NavItem>
             <NavItem>›</NavItem>
-            <NavItem style={{ opacity: this.props.step < 3 ? 0.5 : 1 }}>Paiement</NavItem>
+            <NavItem style={{ opacity: this.props.step < 3 ? 0.5 : 1 }}
+              onClick={ this.onClickBreadcrumb.bind(this, 3, '/checkout') }>Adresse</NavItem>
+            <NavItem>›</NavItem>
+            <NavItem style={{ opacity: this.props.step < 4 ? 0.5 : 1 }}>Paiement</NavItem>
           </Nav>
           <Nav pullRight>
             <NavItem><strong>Total</strong>  { this.props.total } €</NavItem>

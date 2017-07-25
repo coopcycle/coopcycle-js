@@ -3,13 +3,14 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 import { Alert, Panel, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
-import { authenticate } from '../actions'
+import { register } from '../actions'
 
-class LoginForm extends Component {
+class RegisterForm extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      email: '',
       username: '',
       password: ''
     };
@@ -17,8 +18,8 @@ class LoginForm extends Component {
 
   submitForm(e) {
     e.preventDefault();
-    const { username, password } = this.state;
-    this.props.actions.authenticate(username, password);
+    const { email, username, password } = this.state;
+    this.props.actions.register(email, username, password);
   }
 
   handleChange(event) {
@@ -40,8 +41,13 @@ class LoginForm extends Component {
       <Panel>
         <form onSubmit={this.submitForm.bind(this)}>
           <FormGroup>
+            <ControlLabel>Email</ControlLabel>
+            <FormControl name="email" type="email" placeholder="test@coopcycle.org"
+              onChange={ this.handleChange.bind(this) }  />
+          </FormGroup>
+          <FormGroup>
             <ControlLabel>Nom d'utilisateur</ControlLabel>
-            <FormControl name="username" type="text" placeholder="test@coopcycle.org"
+            <FormControl name="username" type="text" placeholder="test"
               onChange={ this.handleChange.bind(this) }  />
           </FormGroup>
           <FormGroup>
@@ -51,12 +57,13 @@ class LoginForm extends Component {
           </FormGroup>
           <FormGroup>
             <Button { ...props } bsStyle="primary" type="submit" block>
-              { loading ? 'Chargement...' : 'Connexion' }
+              { loading ? 'Chargement...' : 'Enregistrement' }
             </Button>
           </FormGroup>
           { error ? <Alert bsStyle="danger">Unable to log in</Alert> : ''}
           <hr />
-          <p className="text-center">Pas encore enregistré ? <a href="#" onClick={ (e) => { e.preventDefault(); this.props.history.push('/register') } }>Créer votre compte.</a></p>
+          <p className="text-center">Déjà enregistré ? <a href="#"
+            onClick={ (e) => { e.preventDefault(); this.props.history.push('/login') } }>Connectez-vous.</a></p>
         </form>
       </Panel>
     )
@@ -71,8 +78,8 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({ authenticate }, dispatch)
+    actions: bindActionCreators({ register }, dispatch)
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(LoginForm))
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RegisterForm))

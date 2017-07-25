@@ -29,12 +29,15 @@ const cartItems = (state = [], action) => {
   }
 }
 
+// TODO Use Address object instead of id
 const cartAddress = (state = null, action) => {
   switch (action.type) {
     case 'INITIALIZE':
       return action.cartAddress;
     case 'PICK_ADDRESS':
       return action.address;
+    case 'CREATE_ADDRESS_SUCCESS':
+      return action.address['@id'];
     default:
       return state
   }
@@ -70,56 +73,18 @@ const credentials = (state = null, action) => {
 }
 
 const user = (state = null, action) => {
+  let user;
+
   switch (action.type) {
     case 'INITIALIZE':
     case 'AUTHENTICATION_SUCCESS':
       return action.user;
+    case 'CREATE_ADDRESS_SUCCESS':
+      user = _.cloneDeep(state);
+      user.addresses.push(action.address);
+      return user;
     case 'DISCONNECT':
       return null;
-    default:
-      return state
-  }
-}
-
-const authenticationRequestState = {
-  loading: false,
-  success: false,
-  error: false,
-}
-
-const authenticationRequest = (state = authenticationRequestState, action) => {
-  switch (action.type) {
-    case 'AUTHENTICATION_REQUEST':
-      return { ...authenticationRequestState, loading: true };
-    case 'AUTHENTICATION_SUCCESS':
-    case 'AUTHENTICATION_FAILURE':
-      return {
-        loading: false,
-        success: action.type === 'AUTHENTICATION_SUCCESS',
-        error: action.type === 'AUTHENTICATION_FAILURE',
-      };
-    default:
-      return state
-  }
-}
-
-const createOrderRequestState = {
-  loading: false,
-  success: false,
-  error: false,
-}
-
-const createOrderRequest = (state = createOrderRequestState, action) => {
-  switch (action.type) {
-    case 'CREATE_ORDER_REQUEST':
-      return { ...createOrderRequestState, loading: true };
-    case 'CREATE_ORDER_SUCCESS':
-    case 'CREATE_ORDER_FAILURE':
-      return {
-        loading: false,
-        success: action.type === 'CREATE_ORDER_SUCCESS',
-        error: action.type === 'CREATE_ORDER_FAILURE',
-      };
     default:
       return state
   }
@@ -134,6 +99,71 @@ const products = (state = [], action) => {
   }
 }
 
+const showAddressForm = (state = false, action) => {
+  switch (action.type) {
+    case 'TOGGLE_ADDRESS_FORM':
+      return !state;
+    case 'CREATE_ADDRESS_SUCCESS':
+      return false;
+    default:
+      return state
+  }
+}
+
+const asyncRequest = {
+  loading: false,
+  success: false,
+  error: false,
+}
+
+const authenticationRequest = (state = asyncRequest, action) => {
+  switch (action.type) {
+    case 'AUTHENTICATION_REQUEST':
+      return { ...asyncRequest, loading: true };
+    case 'AUTHENTICATION_SUCCESS':
+    case 'AUTHENTICATION_FAILURE':
+      return {
+        loading: false,
+        success: action.type === 'AUTHENTICATION_SUCCESS',
+        error: action.type === 'AUTHENTICATION_FAILURE',
+      };
+    default:
+      return state
+  }
+}
+
+const createOrderRequest = (state = asyncRequest, action) => {
+  switch (action.type) {
+    case 'CREATE_ORDER_REQUEST':
+      return { ...asyncRequest, loading: true };
+    case 'CREATE_ORDER_SUCCESS':
+    case 'CREATE_ORDER_FAILURE':
+      return {
+        loading: false,
+        success: action.type === 'CREATE_ORDER_SUCCESS',
+        error: action.type === 'CREATE_ORDER_FAILURE',
+      };
+    default:
+      return state
+  }
+}
+
+const createAddressRequest = (state = asyncRequest, action) => {
+  switch (action.type) {
+    case 'CREATE_ADDRESS_REQUEST':
+      return { ...asyncRequest, loading: true };
+    case 'CREATE_ADDRESS_SUCCESS':
+    case 'CREATE_ADDRESS_FAILURE':
+      return {
+        loading: false,
+        success: action.type === 'CREATE_ADDRESS_SUCCESS',
+        error: action.type === 'CREATE_ADDRESS_FAILURE',
+      };
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   cartItems,
   cartAddress,
@@ -143,5 +173,7 @@ export default combineReducers({
   user,
   authenticationRequest,
   createOrderRequest,
-  products
+  createAddressRequest,
+  products,
+  showAddressForm
 })

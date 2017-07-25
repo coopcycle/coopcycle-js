@@ -25,6 +25,32 @@ var doLogin = function(baseURL, username, password) {
   });
 };
 
+var doRegister = function(baseURL, email, username, password) {
+
+  var formData  = new FormData();
+  formData.append("_email", email);
+  formData.append("_username", username);
+  formData.append("_password", password);
+  var request = new Request(baseURL + '/api/register', {
+    method: 'POST',
+    body: formData
+  });
+
+  return new Promise((resolve, reject) => {
+    fetch(request)
+      .then(function(res) {
+        if (res.ok) {
+          return res.json().then((json) => resolve(json));
+        }
+
+        return res.json().then((json) => reject(json.message));
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  });
+};
+
 var refreshToken = function(baseURL, refreshToken) {
   var formData  = new FormData();
   formData.append("refresh_token", refreshToken);
@@ -170,6 +196,22 @@ class Client {
     */
 
     return doLogin(this.httpBaseURL, username, password)
+      .then((credentials) => {
+
+        this.credentials = credentials;
+
+        // FIXME This is async
+        localforage.setItem('coopcyle__api_credentials', credentials);
+
+        return credentials;
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  register(email, username, password) {
+    return doRegister(this.httpBaseURL, email, username, password)
       .then((credentials) => {
 
         this.credentials = credentials;

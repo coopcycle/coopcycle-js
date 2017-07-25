@@ -39,17 +39,25 @@ export const initialize = (baseURL, restaurantId) => (dispatch, getState) => {
     })
 }
 
+const authenticationSuccess = (dispatch, getState, credentials) => {
+  getState().client.get('/api/me')
+    .then(user => dispatch({ type: 'AUTHENTICATION_SUCCESS', user, credentials }))
+}
+
 export const authenticate = (username, password) => (dispatch, getState) => {
   dispatch({ type: 'AUTHENTICATION_REQUEST' });
   getState().client
     .login(username, password)
-    .then(credentials => {
-      getState().client.get('/api/me')
-        .then(user => {
-          dispatch({ type: 'AUTHENTICATION_SUCCESS', user, credentials })
-        })
-    })
+    .then(credentials => authenticationSuccess(dispatch, getState, credentials))
     .catch(err => dispatch({ type: 'AUTHENTICATION_FAILURE' }))
+}
+
+export const register = (email, username, password) => (dispatch, getState) => {
+  dispatch({ type: 'REGISTRATION_REQUEST' });
+  getState().client
+    .register(email, username, password)
+    .then(credentials => authenticationSuccess(dispatch, getState, credentials))
+    .catch(err => dispatch({ type: 'REGISTRATION_FAILURE' }))
 }
 
 export const disconnect = (username, password) => (dispatch, getState) => {
@@ -60,6 +68,18 @@ export const disconnect = (username, password) => (dispatch, getState) => {
 
 export const pickAddress = (address) => {
   return { type: 'PICK_ADDRESS', address };
+}
+
+export const toggleAddressForm = () => {
+  return { type: 'TOGGLE_ADDRESS_FORM' };
+}
+
+export const createAddress = (streetAddress, geo, postalCode, addressLocality) => (dispatch, getState) => {
+  dispatch({ type: 'CREATE_ADDRESS_REQUEST' });
+  getState().client
+    .post('/api/me/addresses', { streetAddress, geo, postalCode, addressLocality })
+    .then(address => dispatch({ type: 'CREATE_ADDRESS_SUCCESS', address }))
+    .catch(err => dispatch({ type: 'CREATE_ADDRESS_FAILURE' }))
 }
 
 export const finalizeOrder = (stripeToken) => (dispatch, getState) => {

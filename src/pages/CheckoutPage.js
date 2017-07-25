@@ -5,7 +5,7 @@ import { Cart, AddressPicker, Navbar } from '../components'
 const CheckoutPage = () => {
   return (
     <Grid>
-      <Navbar step={2} />
+      <Navbar step={3} />
       <Row>
         <Col md={8} mdOffset={2}>
           <Cart readonly />
