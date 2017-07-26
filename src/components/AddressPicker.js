@@ -74,13 +74,24 @@ class AddressPicker extends Component {
       .catch(error => console.error(error))
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { cartAddress } = nextProps;
+  setCartAddress(cartAddress) {
     if (cartAddress) {
       const isNewAddress = !cartAddress.hasOwnProperty('@id')
       const streetAddress = isNewAddress ? cartAddress.streetAddress : ''
       this.setState({ streetAddress })
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps')
+    const { cartAddress } = nextProps;
+    this.setCartAddress(cartAddress);
+  }
+
+  componentDidMount() {
+    console.log('componentDidMount')
+    const { cartAddress } = this.props;
+    this.setCartAddress(cartAddress);
   }
 
   renderAddressForm() {
