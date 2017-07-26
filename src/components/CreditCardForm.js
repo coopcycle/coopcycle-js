@@ -25,10 +25,19 @@ const cardElementStyle = {
 
 class CreditCardForm extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      errorMessage: ''
+    }
+  }
+
   finalizeOrder() {
+    this.setState({ errorMessage: '' })
+
     this.props.stripe.createToken({ type: 'card' }).then(({ token, error }) => {
       if (error) {
-        console.log(error);
+        this.setState({ errorMessage: error.message })
         return
       }
 
@@ -39,6 +48,7 @@ class CreditCardForm extends Component {
   render() {
 
     const { loading, success, error } = this.props.createOrderRequest;
+    const { errorMessage } = this.state;
 
     if (success) {
       return (
@@ -59,6 +69,7 @@ class CreditCardForm extends Component {
               <CardElement hidePostalCode style={ cardElementStyle } />
             </FormGroup>
           </form>
+          { errorMessage && <Alert bsStyle="danger">{ errorMessage }</Alert> }
         </Panel>
         <Button disabled={ loading } bsSize="large" type="submit" block bsStyle="primary" onClick={ this.finalizeOrder.bind(this) }>
           Payer { this.props.total } €
