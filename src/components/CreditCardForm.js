@@ -25,27 +25,15 @@ const cardElementStyle = {
 
 class CreditCardForm extends Component {
 
-  handleSubmit(e) {
-    // We don't want to let default form submission happen here, which would refresh the page.
-    e.preventDefault();
-
-    // Within the context of `Elements`, this call to createToken knows which Element to
-    // tokenize, since there's only one in this group.
+  finalizeOrder() {
     this.props.stripe.createToken({ type: 'card' }).then(({ token, error }) => {
-
-      console.log('Received Stripe token:', token, error);
-
       if (error) {
         console.log(error);
         return
       }
 
       this.props.actions.finalizeOrder(token);
-
     });
-
-    // However, this line of code will do the same thing:
-    // this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
   }
 
   render() {
@@ -58,16 +46,24 @@ class CreditCardForm extends Component {
       )
     }
 
+    const title = (
+      <h3>Paiement</h3>
+    );
+
     return (
-      <Panel>
-        <form onSubmit={ this.handleSubmit.bind(this) }>
-          <FormGroup>
-            <ControlLabel>Numéro de carte</ControlLabel>
-            <CardElement hidePostalCode style={ cardElementStyle } />
-          </FormGroup>
-          <Button disabled={ loading } type="submit" block bsStyle="primary">Payer { this.props.total } €</Button>
-        </form>
-      </Panel>
+      <div>
+        <Panel header={ title }>
+          <form onSubmit={ e => e.preventDefault() }>
+            <FormGroup>
+              <ControlLabel>Numéro de carte</ControlLabel>
+              <CardElement hidePostalCode style={ cardElementStyle } />
+            </FormGroup>
+          </form>
+        </Panel>
+        <Button disabled={ loading } bsSize="large" type="submit" block bsStyle="primary" onClick={ this.finalizeOrder.bind(this) }>
+          Payer { this.props.total } €
+        </Button>
+      </div>
     )
   }
 }

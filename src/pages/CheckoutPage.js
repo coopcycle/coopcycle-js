@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { Cart, AddressPicker, Navbar } from '../components'
+import { Elements } from 'react-stripe-elements';
+import { Cart, Address, Navbar, Breadcrumb, CreditCardForm } from '../components'
 
 const CheckoutPage = () => {
   return (
     <Grid>
-      <Navbar step={3} />
+      <Navbar />
+      <Breadcrumb step={4} />
       <Row>
         <Col md={8} mdOffset={2}>
           <Cart readonly />
-          <hr />
-          <AddressPicker />
+          <Address />
+          <Elements>
+            <CreditCardForm />
+          </Elements>
         </Col>
       </Row>
     </Grid>

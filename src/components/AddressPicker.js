@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Panel, FormGroup, ControlLabel, FormControl, Radio, Alert, Button } from 'react-bootstrap';
+import { Panel, FormGroup, ControlLabel, FormControl, Radio, Alert, Button, ListGroup, ListGroupItem, Glyphicon } from 'react-bootstrap';
 import PlacesAutocomplete, { geocodeByPlaceId } from 'react-places-autocomplete'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
@@ -11,6 +11,13 @@ const inputMap = {
   postal_code: 'postalCode',
   locality: 'addressLocality'
 };
+
+const autocompleteOptions = {
+  types: ['address'],
+  componentRestrictions: {
+    country: "fr"
+  }
+}
 
 class AddressPicker extends Component {
 
@@ -28,8 +35,8 @@ class AddressPicker extends Component {
     }
   }
 
-  onAddressClick(e) {
-    this.props.actions.pickAddress(e.target.value)
+  onAddressClick(address, e) {
+    this.props.actions.pickAddress(address)
   }
 
   toggleAddressForm() {
@@ -49,48 +56,44 @@ class AddressPicker extends Component {
           const latitude = place.geometry.location.lat();
           const longitude = place.geometry.location.lng();
 
-          let state = {
+          let address = {
+            streetAddress,
             geo: { latitude, longitude }
           }
           for (var i = 0; i < place.address_components.length; i++) {
             var addressType = place.address_components[i].types[0];
             var value = place.address_components[i].long_name;
             if (inputMap.hasOwnProperty(addressType)) {
-              state[inputMap[addressType]] = value;
+              address[inputMap[addressType]] = value;
             }
           }
 
-          this.setState(state);
+          this.props.actions.pickAddress(address)
         }
       })
       .catch(error => console.error(error))
   }
 
-  onButtonClick() {
-    const { streetAddress, geo, postalCode, addressLocality } = this.state;
-    if (this.props.showAddressForm) {
-      this.props.actions.createAddress(streetAddress, geo, postalCode, addressLocality);
-    } else {
-      this.props.history.push('/payment')
+  componentWillReceiveProps(nextProps) {
+    const { cartAddress } = nextProps;
+    if (cartAddress) {
+      const isNewAddress = !cartAddress.hasOwnProperty('@id')
+      const streetAddress = isNewAddress ? cartAddress.streetAddress : ''
+      this.setState({ streetAddress })
     }
   }
 
   renderAddressForm() {
 
-    const { postalCode, addressLocality } = this.state;
+    const { cartAddress } = this.props;
+    const { streetAddress } = this.state;
+    const isNewAddress = cartAddress && !cartAddress.hasOwnProperty('@id');
 
     const inputProps = {
       placeholder: 'Entrez votre adresse',
-      value: this.state.streetAddress,
+      value: streetAddress,
       onChange: (streetAddress) => this.setState({ streetAddress }),
-      autoComplete: false
-    }
-
-    const options = {
-      types: ['address'],
-      componentRestrictions: {
-        country: "fr"
-      }
+      autoComplete: false,
     }
 
     const cssClasses = {
@@ -98,67 +101,52 @@ class AddressPicker extends Component {
     }
 
     return (
-      <form onSubmit={ null }>
-        <hr />
-        <FormGroup>
-          <ControlLabel>Adresse</ControlLabel>
-          <PlacesAutocomplete
-            inputProps={ inputProps }
-            classNames={ cssClasses }
-            options={ options }
-            onSelect={ this.onAddressSelect.bind(this) } />
-        </FormGroup>
-        <FormGroup>
-          <ControlLabel>Code postal</ControlLabel>
-          <FormControl name="postalCode" type="text"
-            onChange={ null }
-            value={ postalCode } />
-        </FormGroup>
-        <FormGroup>
-          <ControlLabel>Ville</ControlLabel>
-          <FormControl name="addressLocality" type="text"
-            onChange={ null }
-            value={ addressLocality } />
-        </FormGroup>
-      </form>
+      <FormGroup validationState={ cartAddress && isNewAddress ? 'success' : null }>
+        <ControlLabel>Entrez votre adresse de livraison</ControlLabel>
+        <PlacesAutocomplete
+          inputProps={ inputProps }
+          classNames={ cssClasses }
+          options={ autocompleteOptions }
+          onSelect={ this.onAddressSelect.bind(this) } />
+        <FormControl.Feedback />
+      </FormGroup>
     )
   }
 
   renderAddressItems() {
     return (
-      <FormGroup>
-      { this.props.addresses.map((item) =>
-        <Radio key={ item['@id'] }
-          name="address"
-          value={ item['@id'] }
-          onClick={ this.onAddressClick.bind(this) }
-          defaultChecked={ item['@id'] === this.props.cartAddress }>
-          { item.streetAddress }
-        </Radio>
-      ) }
-      </FormGroup>
+      <ListGroup>
+        { this.props.addresses.map((item) => {
+          const isActive = this.props.cartAddress && this.props.cartAddress['@id'] === item['@id']
+          return (
+            <ListGroupItem key={ item['@id'] }
+              name="address"
+              value={ item['@id'] }
+              onClick={ this.onAddressClick.bind(this, item) }>
+              <span className={ isActive ? 'text-success' : '' }>{ item.streetAddress }</span>
+              { isActive &&
+              <Glyphicon className="pull-right text-success" glyph="ok" /> }
+            </ListGroupItem>
+          )
+        } ) }
+      </ListGroup>
     )
   }
 
   render() {
 
-    const title = (
-      <h3>Adresses</h3>
-    );
+    const disabled = !this.props.cartAddress;
 
     return (
-      <Panel className="addresses" header={title}>
-        <p>Choisissez une adresse existante</p>
-        { this.props.addresses.length > 0 ? this.renderAddressItems(): (
-          <Alert bsStyle="warning">Aucune adresse</Alert>
-        ) }
-        <Button onClick={ this.toggleAddressForm.bind(this) }>
-          { this.props.showAddressForm ? 'Annuler': 'Ajouter une adresse' }
-        </Button>
-        { this.props.showAddressForm && this.renderAddressForm() }
+      <Panel>
+        { this.renderAddressForm() }
+        <FormGroup>
+          <ControlLabel className="text-muted">Vos adresses sauvegardées</ControlLabel>
+          { this.props.addresses.length === 0 ? ( <Alert bsStyle="warning">Aucune adresse</Alert> ) : this.renderAddressItems() }
+        </FormGroup>
         <hr />
-        <Button bsStyle="primary" block onClick={ this.onButtonClick.bind(this) }>
-          { this.props.showAddressForm ? 'Créer cette adresse': 'Payer la commande' }
+        <Button disabled={ disabled } bsStyle="primary" bsSize="large" block onClick={ () => this.props.history.push('/menu') }>
+          { 'Continuer' }
         </Button>
       </Panel>
     )
@@ -169,7 +157,6 @@ function mapStateToProps(state, props) {
   return {
     cartAddress: state.cartAddress,
     addresses: state.user ? state.user.addresses : [],
-    showAddressForm: state.showAddressForm
   };
 }
 

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { Menu, Navbar, Cart } from '../components'
+import { Menu, Navbar, Breadcrumb, Cart } from '../components'
 
 const MenuPage = () => {
   return (
     <Grid>
-      <Navbar step={1} />
+      <Navbar />
+      <Breadcrumb step={2} />
       <Row>
         <Col md={8}>
           <Menu />

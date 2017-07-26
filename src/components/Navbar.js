@@ -3,18 +3,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import _ from 'lodash'
 import { disconnect } from '../actions'
 
 class Navbar_ extends Component {
 
   onClickDisconnect() {
     this.props.actions.disconnect()
-  }
-
-  onClickBreadcrumb(step, path) {
-    if (this.props.step > step) {
-      this.props.history.push(path);
-    }
   }
 
   render() {
@@ -30,16 +25,9 @@ class Navbar_ extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <NavItem
-              onClick={ () => this.props.history.push('/') }>Panier</NavItem>
-            <NavItem>›</NavItem>
-            <NavItem style={{ opacity: this.props.step < 2 ? 0.5 : 1 }}
-              onClick={ this.onClickBreadcrumb.bind(this, 3, '/checkout') }>Connexion</NavItem>
-            <NavItem>›</NavItem>
-            <NavItem style={{ opacity: this.props.step < 3 ? 0.5 : 1 }}
-              onClick={ this.onClickBreadcrumb.bind(this, 3, '/checkout') }>Adresse</NavItem>
-            <NavItem>›</NavItem>
-            <NavItem style={{ opacity: this.props.step < 4 ? 0.5 : 1 }}>Paiement</NavItem>
+            <NavItem>Livraison : <strong>{ this.props.cartAddress && this.props.cartAddress.streetAddress }</strong></NavItem>
+            { this.props.cartAddress &&
+            <NavItem onClick={ () => this.props.history.push('/') }>Modifier</NavItem> }
           </Nav>
           <Nav pullRight>
             <NavItem><strong>Total</strong>  { this.props.total } €</NavItem>
@@ -58,7 +46,8 @@ function mapStateToProps(state, props) {
 
   return {
     user: state.user,
-    total
+    cartAddress: state.cartAddress,
+    total,
   };
 }
 

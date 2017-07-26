@@ -33,7 +33,7 @@ class Cart extends Component {
     const buttonDisabled = this.props.cartItems.length === 0;
 
     return (
-      <Button disabled={ buttonDisabled } bsStyle="primary" block onClick={ this.onButtonClick.bind(this) }>Commander</Button>
+      <Button disabled={ buttonDisabled } bsStyle="primary" bsSize="large" block onClick={ this.onButtonClick.bind(this) }>Commander</Button>
     )
   }
 

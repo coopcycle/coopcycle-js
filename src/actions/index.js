@@ -74,43 +74,52 @@ export const toggleAddressForm = () => {
   return { type: 'TOGGLE_ADDRESS_FORM' };
 }
 
-export const createAddress = (streetAddress, geo, postalCode, addressLocality) => (dispatch, getState) => {
-  dispatch({ type: 'CREATE_ADDRESS_REQUEST' });
-  getState().client
-    .post('/api/me/addresses', { streetAddress, geo, postalCode, addressLocality })
-    .then(address => dispatch({ type: 'CREATE_ADDRESS_SUCCESS', address }))
-    .catch(err => dispatch({ type: 'CREATE_ADDRESS_FAILURE' }))
+const createAddress = (client, payload) => {
+  return client.post('/api/me/addresses', payload)
 }
 
-export const finalizeOrder = (stripeToken) => (dispatch, getState) => {
-
-  const { client, restaurantId, cartItems, cartAddress } = getState();
-
-  let payload = {
-    restaurant: '/api/restaurants/' + restaurantId,
-    orderedItem: []
-  }
-  payload.orderedItem = _.map(cartItems, (item) => {
+const createOrderPayload = (restaurantId, cartItems, cartAddress) => {
+  const orderedItem = _.map(cartItems, (item) => {
     return {
       quantity: item.quantity,
       product: item.product['@id']
     }
   });
-  payload.delivery = {
-    deliveryAddress: cartAddress
+
+  return {
+    // Load restaurant & use @id
+    restaurant: '/api/restaurants/' + restaurantId,
+    orderedItem: orderedItem,
+    delivery: {
+      deliveryAddress: cartAddress['@id']
+    }
   }
+}
 
-  dispatch({ type: 'CREATE_ORDER_REQUEST' });
-
-  client.post('/api/orders', payload)
+const createOrder = (client, payload, stripeToken) => {
+  return client.post('/api/orders', payload)
     .then((order) => {
       return client.put(order['@id'] + '/pay', {
         stripeToken: stripeToken.id
       })
     })
-    .then((order) => {
-      dispatch({ type: 'CREATE_ORDER_SUCCESS', order })
-    })
-    // TODO Error control
+}
 
+export const finalizeOrder = (stripeToken) => (dispatch, getState) => {
+
+  const { client, restaurantId, cartItems, cartAddress } = getState();
+  const isNewAddress = !cartAddress.hasOwnProperty('@id');
+
+  dispatch({ type: 'CREATE_ORDER_REQUEST' });
+
+  if (isNewAddress) {
+    createAddress(client, cartAddress)
+      .then(newAddress => createOrder(client, createOrderPayload(restaurantId, cartItems, newAddress), stripeToken))
+      .then(order => dispatch({ type: 'CREATE_ORDER_SUCCESS', order }))
+  } else {
+    createOrder(client, createOrderPayload(restaurantId, cartItems, cartAddress), stripeToken)
+      .then(order => dispatch({ type: 'CREATE_ORDER_SUCCESS', order }))
+  }
+
+  // TODO Error control
 }

@@ -4,6 +4,7 @@ import CheckoutPage from './CheckoutPage'
 import PaymentPage from './PaymentPage'
 import ConfirmPage from './ConfirmPage'
 import RegisterPage from './RegisterPage'
+import AddressPage from './AddressPage'
 
 module.exports = {
   MenuPage,
@@ -12,4 +13,5 @@ module.exports = {
   CheckoutPage,
   PaymentPage,
   ConfirmPage,
+  AddressPage,
 }
