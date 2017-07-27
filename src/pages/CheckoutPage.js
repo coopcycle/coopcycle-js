@@ -5,7 +5,7 @@ import { Cart, Address, Navbar, Breadcrumb, CreditCardForm } from '../components
 
 const CheckoutPage = () => {
   return (
-    <Grid>
+    <Grid fluid>
       <Navbar />
       <Breadcrumb step={4} />
       <Row>

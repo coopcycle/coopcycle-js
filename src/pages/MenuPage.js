@@ -4,7 +4,7 @@ import { Menu, Navbar, Breadcrumb, Cart } from '../components'
 
 const MenuPage = () => {
   return (
-    <Grid>
+    <Grid fluid>
       <Navbar />
       <Breadcrumb step={2} />
       <Row>

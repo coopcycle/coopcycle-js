@@ -13,23 +13,13 @@
         </style>
     </head>
     <body>
-        <div id="app"></div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.6.0/react-dom.js"></script>
-        <script src="https://npmcdn.com/babel-core@5.8.38/browser.min.js"></script>
-        <script src="https://js.stripe.com/v3/"></script>
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAqNf8X0elLLXv5yeh0btsYpq47eCzIAw&libraries=places"></script>
+        <p class="text-center">
+            <button class="btn btn-success" rel="coopcycle"
+                data-base-url="https://toulouse.coopcycle.org"
+                data-restaurant-id="2"
+                data-stripe-publishable-key="pk_test_fvLChNxPPlcbMDlzuTljlgpL"
+                data-google-api-key="AIzaSyCAqNf8X0elLLXv5yeh0btsYpq47eCzIAw">Commander</button>
+        </p>
         <script src="/coopcycle.js"></script>
-        <script type="text/babel">
-
-        var el = document.querySelector('#app');
-
-        Coopcycle.init(el, {
-            baseURL: "https://toulouse.coopcycle.org",
-            restaurantId: 2,
-            stripePublishableKey: "pk_test_fvLChNxPPlcbMDlzuTljlgpL"
-        });
-
-        </script>
     </body>
 </html>

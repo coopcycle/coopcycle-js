@@ -4,7 +4,7 @@ import { AddressPicker, Navbar, Breadcrumb } from '../components'
 
 export default () => {
   return (
-    <Grid>
+    <Grid fluid>
       <Navbar />
       <Breadcrumb step={1} />
       <Row>

@@ -3,7 +3,7 @@ import { Grid, Row, Col, Alert } from 'react-bootstrap';
 
 const ConfirmPage = () => {
   return (
-    <Grid>
+    <Grid fluid>
       <Row>
         <Col md={8} mdOffset={2}>
           <Alert bsStyle="success">Votre commande est validée !</Alert>
