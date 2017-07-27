@@ -6,7 +6,27 @@ import App from './app'
 const modalStyle = {
   overlay: {
     backgroundColor: 'rgba(0, 0, 0, 0.75)'
+  },
+  content : {
+    top           : '20px',
+    left          : '20px',
+    right         : '20px',
+    bottom        : '20px',
+    padding       : 0,
+    borderRadius  : 0
   }
+}
+
+const renderApp = (el, isOpen, baseURL, restaurantId, stripePublishableKey) => {
+  return render(
+    <Modal isOpen={ isOpen } contentLabel="Commander" style={ modalStyle }>
+      <App
+        baseURL={ baseURL }
+        restaurantId={ restaurantId }
+        stripePublishableKey={ stripePublishableKey }
+        onClose={ () => renderApp(el, false, baseURL, restaurantId, stripePublishableKey) }
+        isOpen={ isOpen } />
+    </Modal>, el);
 }
 
 const el = document.querySelector('[rel="coopcycle"]');
@@ -31,26 +51,14 @@ if (el) {
       document.body.append(script);
     })
 
-    const app = document.createElement('div');
-    app.setAttribute('id', 'coopcycle__app');
-    document.body.append(app);
+    const rootEl = document.createElement('div');
+    rootEl.setAttribute('id', 'coopcycle__app');
+    document.body.append(rootEl);
 
-    const modal = render(
-      <Modal isOpen={ false } contentLabel="Commander" style={ modalStyle }>
-        <div className="container-fluid" style={{ marginBottom: 10 }}>
-          <button type="button" className="close" aria-label="Close" onClick={e => {
-            e.preventDefault();
-            modal.portal.close();
-          }}>
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <App baseURL={ baseURL } restaurantId={ restaurantId } stripePublishableKey={ stripePublishableKey } />
-      </Modal>, app);
+    let modal = renderApp(rootEl, false, baseURL, restaurantId, stripePublishableKey);
 
     el.addEventListener('click', (e) => {
-      e.preventDefault();
-      modal.portal.open();
+      modal = renderApp(rootEl, true, baseURL, restaurantId, stripePublishableKey)
     });
 
   }

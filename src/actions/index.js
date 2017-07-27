@@ -123,3 +123,7 @@ export const finalizeOrder = (stripeToken) => (dispatch, getState) => {
 
   // TODO Error control
 }
+
+export const closeModal = () => {
+  return { type: 'CLOSE_MODAL' }
+}

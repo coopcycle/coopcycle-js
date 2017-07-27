@@ -4,7 +4,13 @@ import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import _ from 'lodash'
-import { disconnect } from '../actions'
+import { disconnect, closeModal } from '../actions'
+
+const navbarStyle = {
+  marginLeft    : '-15px',
+  marginRight   : '-15px',
+  borderRadius  : 0
+}
 
 class Navbar_ extends Component {
 
@@ -12,12 +18,17 @@ class Navbar_ extends Component {
     this.props.actions.disconnect()
   }
 
+  onClickClose(e) {
+    e.preventDefault();
+    this.props.actions.closeModal();
+  }
+
   render() {
 
     const isAuthenticated = !!this.props.user
 
     return (
-      <Navbar fluid>
+      <Navbar fluid style={ navbarStyle }>
         <Navbar.Header>
           <Navbar.Brand>
             <a>Restaurant</a>
@@ -33,6 +44,13 @@ class Navbar_ extends Component {
             <NavItem><strong>Total</strong>  { this.props.total } €</NavItem>
             <NavItem href="#">{ isAuthenticated ? this.props.user.username : "Vous n'êtes pas connecté" }</NavItem>
             { isAuthenticated && <NavItem onClick={ this.onClickDisconnect.bind(this) }>Déconnexion</NavItem> }
+            <NavItem>
+              <button type="button" className="close" aria-label="Close"
+                style={{ float: 'none' }}
+                onClick={ this.onClickClose.bind(this) }>
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </NavItem>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -53,7 +71,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({ disconnect }, dispatch)
+    actions: bindActionCreators({ disconnect, closeModal }, dispatch)
   }
 }
 

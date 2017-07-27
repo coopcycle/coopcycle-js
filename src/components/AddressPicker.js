@@ -83,13 +83,11 @@ class AddressPicker extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps')
     const { cartAddress } = nextProps;
     this.setCartAddress(cartAddress);
   }
 
   componentDidMount() {
-    console.log('componentDidMount')
     const { cartAddress } = this.props;
     this.setCartAddress(cartAddress);
   }

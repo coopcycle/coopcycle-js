@@ -164,6 +164,17 @@ const createAddressRequest = (state = asyncRequest, action) => {
   }
 }
 
+const isOpen = (state = true, action) => {
+  switch (action.type) {
+    case 'INITIALIZE':
+      return true;
+    case 'CLOSE_MODAL':
+      return false;
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   cartItems,
   cartAddress,
@@ -175,5 +186,6 @@ export default combineReducers({
   createOrderRequest,
   createAddressRequest,
   products,
-  showAddressForm
+  showAddressForm,
+  isOpen
 })
