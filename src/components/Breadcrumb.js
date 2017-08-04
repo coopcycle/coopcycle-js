@@ -20,7 +20,7 @@ class Breadcrumb_ extends Component {
         <Breadcrumb.Item onClick={ () => this.props.history.push('/') }>
           Adresse
         </Breadcrumb.Item>
-        <Breadcrumb.Item active={ this.props.step < 2 }>
+        <Breadcrumb.Item active={ this.props.step < 2 } onClick={ e => this.onClickItem(2, '/menu') }>
           Panier
         </Breadcrumb.Item>
         <Breadcrumb.Item active={ this.props.step < 3 }>

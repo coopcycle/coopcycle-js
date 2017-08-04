@@ -50,7 +50,7 @@ class LoginForm extends Component {
               onChange={ this.handleChange.bind(this) } />
           </FormGroup>
           <FormGroup>
-            <Button { ...props } bsStyle="primary" type="submit" block>
+            <Button { ...props } bsStyle="primary" bsSize="large" type="submit" block>
               { loading ? 'Chargement...' : 'Connexion' }
             </Button>
           </FormGroup>
