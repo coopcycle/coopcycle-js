@@ -5,9 +5,9 @@ import { withRouter, Redirect } from 'react-router-dom'
 import { Elements } from 'react-stripe-elements';
 import { Cart, Address, Navbar, Breadcrumb, CreditCardForm } from '../components'
 
-const CheckoutPage = ({ user }) => {
+const CheckoutPage = ({ user, cartAddress }) => {
 
-  if (!user) {
+  if (!user || !cartAddress) {
     return (
       <Redirect to={{ pathname: '/' }} />
     )
@@ -33,6 +33,7 @@ const CheckoutPage = ({ user }) => {
 function mapStateToProps(state, props) {
   return {
     user: state.user,
+    cartAddress: state.cartAddress
   };
 }
 

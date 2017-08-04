@@ -38,6 +38,9 @@ const cartAddress = (state = null, action) => {
       return action.address;
     case 'CREATE_ADDRESS_SUCCESS':
       return action.address['@id'];
+    case 'DISCONNECT':
+      const isNewAddress = !state.hasOwnProperty('@id')
+      return isNewAddress ? state : null
     default:
       return state
   }

@@ -1,8 +1,17 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { withRouter, Redirect } from 'react-router-dom'
 import { Grid, Row, Col } from 'react-bootstrap';
 import { Menu, Navbar, Breadcrumb, Cart } from '../components'
 
-const MenuPage = () => {
+const MenuPage = ({ cartAddress }) => {
+
+  if (!cartAddress) {
+    return (
+      <Redirect to={{ pathname: '/' }} />
+    )
+  }
+
   return (
     <Grid fluid>
       <Navbar />
@@ -19,4 +28,10 @@ const MenuPage = () => {
   )
 }
 
-export default MenuPage
+function mapStateToProps(state, props) {
+  return {
+    cartAddress: state.cartAddress,
+  };
+}
+
+export default withRouter(connect(mapStateToProps)(MenuPage))
