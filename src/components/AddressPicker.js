@@ -37,7 +37,8 @@ class AddressPicker extends Component {
         latitude: 0,
         longitude: 0
       },
-      placeId: null
+      placeId: null,
+      success: false
     }
   }
 
@@ -80,22 +81,39 @@ class AddressPicker extends Component {
       .catch(error => console.error(error))
   }
 
-  setCartAddress(cartAddress) {
+  getStreetAddress(cartAddress) {
     if (cartAddress) {
       const isNewAddress = !cartAddress.hasOwnProperty('@id')
-      const streetAddress = isNewAddress ? cartAddress.streetAddress : ''
-      this.setState({ streetAddress })
+
+      return isNewAddress ? cartAddress.streetAddress : ''
     }
   }
 
   componentWillReceiveProps(nextProps) {
     const { cartAddress } = nextProps;
-    this.setCartAddress(cartAddress);
+
+    const isRequestFinished = this.props.checkDistanceRequest.loading && !nextProps.checkDistanceRequest.loading
+    const success = isRequestFinished && nextProps.checkDistanceRequest.success
+
+    const newState = { success };
+
+    const streetAddress = this.getStreetAddress(cartAddress);
+    if (streetAddress) {
+      Object.assign(newState, { streetAddress });
+    }
+    this.setState(newState);
   }
 
   componentDidMount() {
     const { cartAddress } = this.props;
-    this.setCartAddress(cartAddress);
+
+    const newState = { success: false }
+
+    const streetAddress = this.getStreetAddress(cartAddress);
+    if (streetAddress) {
+      Object.assign(newState, { streetAddress })
+    }
+    this.setState(newState)
   }
 
   renderAddressForm() {
@@ -151,8 +169,8 @@ class AddressPicker extends Component {
 
   render() {
 
-
-    const { loading, success, error } = this.props.checkDistanceRequest;
+    const { loading, error } = this.props.checkDistanceRequest;
+    const { success } = this.state;
 
     const disabled = !this.props.cartAddress || loading;
     const buttonText = loading ? 'Vérification…' : 'Continuer'
