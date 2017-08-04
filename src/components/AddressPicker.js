@@ -4,8 +4,8 @@ import PlacesAutocomplete, { geocodeByPlaceId } from 'react-places-autocomplete'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import _ from 'lodash';
-import { withRouter } from 'react-router-dom'
-import { toggleAddressForm, pickAddress, createAddress } from '../actions'
+import { withRouter, Redirect } from 'react-router-dom'
+import { toggleAddressForm, pickAddress, createAddress, checkDistance } from '../actions'
 
 const inputMap = {
   postal_code: 'postalCode',
@@ -16,6 +16,12 @@ const autocompleteOptions = {
   types: ['address'],
   componentRestrictions: {
     country: "fr"
+  }
+}
+
+const autocompleteStyles = {
+  autocompleteContainer: {
+    zIndex: 1
   }
 }
 
@@ -116,7 +122,8 @@ class AddressPicker extends Component {
           inputProps={ inputProps }
           classNames={ cssClasses }
           options={ autocompleteOptions }
-          onSelect={ this.onAddressSelect.bind(this) } />
+          onSelect={ this.onAddressSelect.bind(this) }
+          styles={ autocompleteStyles } />
         <FormControl.Feedback />
       </FormGroup>
     )
@@ -144,7 +151,17 @@ class AddressPicker extends Component {
 
   render() {
 
-    const disabled = !this.props.cartAddress;
+
+    const { loading, success, error } = this.props.checkDistanceRequest;
+
+    const disabled = !this.props.cartAddress || loading;
+    const buttonText = loading ? 'Vérification…' : 'Continuer'
+
+    if (success) {
+      return (
+        <Redirect to={{ pathname: '/menu' }} />
+      )
+    }
 
     return (
       <Panel>
@@ -153,9 +170,12 @@ class AddressPicker extends Component {
           <ControlLabel className="text-muted">Vos adresses sauvegardées</ControlLabel>
           { this.props.addresses.length === 0 ? ( <Alert bsStyle="warning">Aucune adresse</Alert> ) : this.renderAddressItems() }
         </FormGroup>
+        { (error && !loading) && (
+          <Alert bsStyle="danger">Désolé, nous n'assurons pas les livraisons à cette adresse (3km maximum)</Alert>
+        ) }
         <hr />
-        <Button disabled={ disabled } bsStyle="primary" bsSize="large" block onClick={ () => this.props.history.push('/menu') }>
-          { 'Continuer' }
+        <Button block disabled={ disabled } bsStyle="primary" bsSize="large" onClick={ () => this.props.actions.checkDistance() }>
+          { buttonText }
         </Button>
       </Panel>
     )
@@ -166,12 +186,13 @@ function mapStateToProps(state, props) {
   return {
     cartAddress: state.cartAddress,
     addresses: state.user ? state.user.addresses : [],
+    checkDistanceRequest: state.checkDistanceRequest
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({ toggleAddressForm, pickAddress, createAddress }, dispatch)
+    actions: bindActionCreators({ toggleAddressForm, pickAddress, createAddress, checkDistance }, dispatch)
   }
 }
 

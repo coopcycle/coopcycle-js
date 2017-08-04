@@ -161,24 +161,29 @@ class Client {
           }
           else {
             response.json().then(function (data) {
-              if (response.status === 401 && data.message === 'Bad credentials' && this.credentials['refresh_token']) {
-                console.log('Request is not authorized, refreshing token...');
-                return refreshToken(this.httpBaseURL, this.credentials['refresh_token'])
-                  .then((credentials) => {
-                    console.log('Storing new credentials...');
-                    // FIXME This is async
-                    localforage.setItem('coopcyle__api_credentials', credentials);
+              switch (response.status) {
 
-                    req.headers.set('Authorization', 'Bearer ' + credentials.token);
-                    return this.fetch(req);
-                  })
-                  .catch((err) => {
-                    console.log('Refresh token is not valid ' + credentials['refresh_token']);
-                    throw 'Invalid refresh token';
-                  });
-              }
-              else {
-                throw 'Error (' + response.status + ') ' + JSON.stringify(data.message);
+                case 401:
+                  if (data.message === 'Bad credentials' && this.credentials['refresh_token']) {
+                    console.log('Request is not authorized, refreshing token...');
+                    return refreshToken(this.httpBaseURL, this.credentials['refresh_token'])
+                      .then((credentials) => {
+                        console.log('Storing new credentials...');
+                        // FIXME This is async
+                        localforage.setItem('coopcyle__api_credentials', credentials);
+
+                        req.headers.set('Authorization', 'Bearer ' + credentials.token);
+                        return this.fetch(req);
+                      })
+                      .catch((err) => {
+                        console.log('Refresh token is not valid ' + credentials['refresh_token']);
+                        throw 'Invalid refresh token';
+                      });
+                  }
+                  break;
+
+                default:
+                  reject(data);
               }
             });
           }

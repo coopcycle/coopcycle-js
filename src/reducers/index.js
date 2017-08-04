@@ -164,6 +164,22 @@ const createAddressRequest = (state = asyncRequest, action) => {
   }
 }
 
+const checkDistanceRequest = (state = asyncRequest, action) => {
+  switch (action.type) {
+    case 'CHECK_DISTANCE_REQUEST':
+      return { ...asyncRequest, loading: true };
+    case 'CHECK_DISTANCE_SUCCESS':
+    case 'CHECK_DISTANCE_FAILURE':
+      return {
+        loading: false,
+        success: action.type === 'CHECK_DISTANCE_SUCCESS',
+        error: action.type === 'CHECK_DISTANCE_FAILURE',
+      };
+    default:
+      return state
+  }
+}
+
 const isOpen = (state = true, action) => {
   switch (action.type) {
     case 'INITIALIZE':
@@ -185,6 +201,7 @@ export default combineReducers({
   authenticationRequest,
   createOrderRequest,
   createAddressRequest,
+  checkDistanceRequest,
   products,
   showAddressForm,
   isOpen

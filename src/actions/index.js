@@ -127,3 +127,14 @@ export const finalizeOrder = (stripeToken) => (dispatch, getState) => {
 export const closeModal = () => {
   return { type: 'CLOSE_MODAL' }
 }
+
+export const checkDistance = () => (dispatch, getState) => {
+
+  const { client, restaurantId, cartAddress } = getState();
+
+  dispatch({ type: 'CHECK_DISTANCE_REQUEST' });
+
+  client.get('/api/restaurants/' + restaurantId + '/can-deliver/' + cartAddress.geo.latitude + ',' + cartAddress.geo.longitude)
+    .then(response => dispatch({ type: 'CHECK_DISTANCE_SUCCESS' }))
+    .catch(e => dispatch({ type: 'CHECK_DISTANCE_FAILURE' }))
+}
