@@ -7,14 +7,19 @@ import { addToCart } from '../actions'
 
 class Menu extends Component {
 
-  renderSection(name, products) {
+  renderSection(section) {
+
+    if (section.hasMenuItem.length === 0) {
+      return;
+    }
+
     return (
-      <div key={ name }>
-        <h4>{ name }</h4>
+      <div key={ section.name }>
+        <h4>{ section.name }</h4>
         <ListGroup>
-        { products.map((product) =>
-          <ListGroupItem key={ product['@id'] } onClick={() => { this.props.actions.addToCart(product) }}>
-          { product.name } <span className="pull-right">{ product.price } €</span>
+        { section.hasMenuItem.map((item) =>
+          <ListGroupItem key={ item['@id'] } onClick={() => { this.props.actions.addToCart(item) }}>
+          { item.name } <span className="pull-right">{ item.offers.price } €</span>
           </ListGroupItem>
         ) }
         </ListGroup>
@@ -25,20 +30,16 @@ class Menu extends Component {
   render() {
     return (
       <div>
-      { _.map(this.props.sections, (products, name) => this.renderSection(name, products)) }
+      { _.map(this.props.menu.hasMenuSection, (section) => this.renderSection(section)) }
       </div>
     )
   }
 }
 
 function mapStateToProps(state, props) {
-
-  const sections = _.groupBy(state.products, product => product.recipeCategory)
-
   return {
     client: state.client,
-    restaurantId: state.restaurantId,
-    sections,
+    menu: state.restaurant.hasMenu
   };
 }
 

@@ -4,26 +4,26 @@ import Client from '../client'
 
 const cartItems = (state = [], action) => {
 
-  let newState, item;
+  let newState, cartItem;
 
   switch (action.type) {
     case 'INITIALIZE':
       return action.cartItems || [];
     case 'ADD_TO_CART':
       newState = state.slice();
-      item = _.find(newState, (item) => item.product['@id'] === action.product['@id']);
-      if (item) {
-        ++item.quantity;
+      cartItem = _.find(newState, (item) => item.menuItem['@id'] === action.menuItem['@id']);
+      if (cartItem) {
+        ++cartItem.quantity;
       } else {
-        item = {
-          product: action.product,
+        cartItem = {
+          menuItem: action.menuItem,
           quantity: 1
         }
-        newState.push(item);
+        newState.push(cartItem);
       }
       return newState;
     case 'REMOVE_FROM_CART':
-      return _.filter(state, (item) => item.product !== action.product);
+      return _.filter(state, (item) => item !== action.cartItem);
     default:
       return state
   }
@@ -57,10 +57,10 @@ const client = (state = null, action) => {
   }
 }
 
-const restaurantId = (state = null, action) => {
+const restaurant = (state = null, action) => {
   switch (action.type) {
     case 'INITIALIZE':
-      return action.restaurantId;
+      return action.restaurant;
     default:
       return state
   }
@@ -90,15 +90,6 @@ const user = (state = null, action) => {
       return user;
     case 'DISCONNECT':
       return null;
-    default:
-      return state
-  }
-}
-
-const products = (state = [], action) => {
-  switch (action.type) {
-    case 'INITIALIZE':
-      return action.products;
     default:
       return state
   }
@@ -200,14 +191,13 @@ export default combineReducers({
   cartItems,
   cartAddress,
   client,
-  restaurantId,
+  restaurant,
   credentials,
   user,
   authenticationRequest,
   createOrderRequest,
   createAddressRequest,
   checkDistanceRequest,
-  products,
   showAddressForm,
   isOpen
 })

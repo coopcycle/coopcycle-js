@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 import { finalizeOrder } from '../actions'
+import { cartTotal } from '../utils'
 
 const cardElementStyle = {
   base: {
@@ -80,15 +81,10 @@ class CreditCardForm extends Component {
 }
 
 function mapStateToProps(state, props) {
-
-  const cartItems = state.cartItems;
-  const total = _.sumBy(cartItems, (item) => item.product.price * item.quantity).toFixed(2);
-
   return {
-    restaurantId: state.restaurantId,
-    cartItems: cartItems,
+    cartItems: state.cartItems,
     cartAddress: state.cartAddress,
-    total: total,
+    total: cartTotal(state.cartItems),
     createOrderRequest: state.createOrderRequest
   };
 }

@@ -1,12 +1,12 @@
 import localforage from 'localforage'
 import Client from '../client'
 
-export const addToCart = product => {
-  return { type: 'ADD_TO_CART', product }
+export const addToCart = menuItem => {
+  return { type: 'ADD_TO_CART', menuItem }
 }
 
-export const removeFromCart = product => {
-  return { type: 'REMOVE_FROM_CART', product }
+export const removeFromCart = cartItem => {
+  return { type: 'REMOVE_FROM_CART', cartItem }
 }
 
 const loadCartItems = () => {
@@ -21,9 +21,8 @@ const loadUser = () => {
   return localforage.getItem('user')
 }
 
-const loadProducts = (client, restaurantId) => {
+const loadRestaurant = (client, restaurantId) => {
   return client.get('/api/restaurants/' + restaurantId)
-    .then(response => response.products)
 }
 
 export const initialize = (baseURL, restaurantId) => (dispatch, getState) => {
@@ -31,10 +30,10 @@ export const initialize = (baseURL, restaurantId) => (dispatch, getState) => {
     .then(credentials => {
       const client = new Client(baseURL, credentials)
 
-      Promise.all([ loadProducts(client, restaurantId), loadCartItems(), loadCartAddress(), loadUser() ])
+      Promise.all([ loadRestaurant(client, restaurantId), loadCartItems(), loadCartAddress(), loadUser() ])
         .then(values => {
-          const [ products, cartItems, cartAddress, user ] = values;
-          dispatch({ type: 'INITIALIZE', client, restaurantId, cartItems, cartAddress, user, products })
+          const [ restaurant, cartItems, cartAddress, user ] = values;
+          dispatch({ type: 'INITIALIZE', client, cartItems, cartAddress, user, restaurant })
         })
     })
 }
@@ -78,17 +77,16 @@ const createAddress = (client, payload) => {
   return client.post('/api/me/addresses', payload)
 }
 
-const createOrderPayload = (restaurantId, cartItems, cartAddress) => {
+const createOrderPayload = (restaurant, cartItems, cartAddress) => {
   const orderedItem = _.map(cartItems, (item) => {
     return {
       quantity: item.quantity,
-      product: item.product['@id']
+      menuItem: item.menuItem['@id']
     }
   });
 
   return {
-    // Load restaurant & use @id
-    restaurant: '/api/restaurants/' + restaurantId,
+    restaurant: restaurant['@id'],
     orderedItem: orderedItem,
     delivery: {
       deliveryAddress: cartAddress['@id']
@@ -107,17 +105,17 @@ const createOrder = (client, payload, stripeToken) => {
 
 export const finalizeOrder = (stripeToken) => (dispatch, getState) => {
 
-  const { client, restaurantId, cartItems, cartAddress } = getState();
+  const { client, restaurant, cartItems, cartAddress } = getState();
   const isNewAddress = !cartAddress.hasOwnProperty('@id');
 
   dispatch({ type: 'CREATE_ORDER_REQUEST' });
 
   if (isNewAddress) {
     createAddress(client, cartAddress)
-      .then(newAddress => createOrder(client, createOrderPayload(restaurantId, cartItems, newAddress), stripeToken))
+      .then(newAddress => createOrder(client, createOrderPayload(restaurant, cartItems, newAddress), stripeToken))
       .then(order => dispatch({ type: 'CREATE_ORDER_SUCCESS', order }))
   } else {
-    createOrder(client, createOrderPayload(restaurantId, cartItems, cartAddress), stripeToken)
+    createOrder(client, createOrderPayload(restaurant, cartItems, cartAddress), stripeToken)
       .then(order => dispatch({ type: 'CREATE_ORDER_SUCCESS', order }))
   }
 
@@ -130,11 +128,11 @@ export const closeModal = () => {
 
 export const checkDistance = () => (dispatch, getState) => {
 
-  const { client, restaurantId, cartAddress } = getState();
+  const { client, restaurant, cartAddress } = getState();
 
   dispatch({ type: 'CHECK_DISTANCE_REQUEST' });
 
-  client.get('/api/restaurants/' + restaurantId + '/can-deliver/' + cartAddress.geo.latitude + ',' + cartAddress.geo.longitude)
+  client.get(restaurant['@id'] + '/can-deliver/' + cartAddress.geo.latitude + ',' + cartAddress.geo.longitude)
     .then(response => dispatch({ type: 'CHECK_DISTANCE_SUCCESS' }))
     .catch(e => dispatch({ type: 'CHECK_DISTANCE_FAILURE' }))
 }

@@ -5,6 +5,7 @@ import { withRouter, Redirect } from 'react-router-dom'
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import _ from 'lodash'
 import { disconnect, closeModal } from '../actions'
+import { cartTotal } from '../utils'
 
 const navbarStyle = {
   marginLeft    : '-15px',
@@ -59,13 +60,10 @@ class Navbar_ extends Component {
 }
 
 function mapStateToProps(state, props) {
-
-  const total = _.sumBy(state.cartItems, (item) => item.product.price * item.quantity).toFixed(2);
-
   return {
     user: state.user,
     cartAddress: state.cartAddress,
-    total,
+    total: cartTotal(state.cartItems),
   };
 }
 

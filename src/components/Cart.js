@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import _ from 'lodash';
 import { withRouter } from 'react-router-dom'
 import { removeFromCart } from '../actions'
+import { cartTotal } from '../utils'
 
 class Cart extends Component {
 
@@ -16,11 +17,11 @@ class Cart extends Component {
     return (
       <ListGroup>
       { this.props.cartItems.map((item) =>
-        <ListGroupItem key={ item.product['@id'] }>
-          { item.product.name }
+        <ListGroupItem key={ item.menuItem['@id'] }>
+          { item.menuItem.name }
           <span className="quantity text-muted">×{ item.quantity }</span>
           <button type="button" className="close pull-right" aria-label="Close"
-            onClick={ () => this.props.actions.removeFromCart(item.product) }>
+            onClick={ () => this.props.actions.removeFromCart(item) }>
             <span aria-hidden="true">×</span>
           </button>
         </ListGroupItem>
@@ -59,13 +60,9 @@ class Cart extends Component {
 }
 
 function mapStateToProps(state, props) {
-
-  const cartItems = state.cartItems;
-  const total = _.sumBy(cartItems, (item) => item.product.price * item.quantity).toFixed(2);
-
   return {
-    cartItems: cartItems,
-    total: total,
+    cartItems: state.cartItems,
+    total: cartTotal(state.cartItems),
     isAuthenticated: !!state.user
   };
 }
