@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import Modal from 'react-modal'
 import App from './app'
+import Client from './client'
 
 const modalStyle = {
   overlay: {
@@ -29,40 +30,46 @@ const renderApp = (el, isOpen, baseURL, restaurantId, stripePublishableKey) => {
     </Modal>, el);
 }
 
-const el = document.querySelector('[rel="coopcycle"]');
+if (typeof window !== 'undefined') {
 
-if (el) {
+  const el = document.querySelector('[rel="coopcycle"]');
 
-  const baseURL = el.getAttribute('data-base-url');
-  const restaurantId = el.getAttribute('data-restaurant-id');
-  const stripePublishableKey = el.getAttribute('data-stripe-publishable-key');
-  const googleApiKey = el.getAttribute('data-google-api-key');
+  if (el) {
 
-  if (baseURL && restaurantId && stripePublishableKey && googleApiKey) {
+    const baseURL = el.getAttribute('data-base-url');
+    const restaurantId = el.getAttribute('data-restaurant-id');
+    const stripePublishableKey = el.getAttribute('data-stripe-publishable-key');
+    const googleApiKey = el.getAttribute('data-google-api-key');
 
-    const scripts = [
-      'https://js.stripe.com/v3/',
-      'https://maps.googleapis.com/maps/api/js?libraries=places&key=' + googleApiKey
-    ]
+    if (baseURL && restaurantId && stripePublishableKey && googleApiKey) {
 
-    scripts.forEach(src => {
-      const script = document.createElement('script');
-      script.setAttribute('src', src);
-      document.body.append(script);
-    })
+      const scripts = [
+        'https://js.stripe.com/v3/',
+        'https://maps.googleapis.com/maps/api/js?libraries=places&key=' + googleApiKey
+      ]
 
-    const rootEl = document.createElement('div');
-    rootEl.setAttribute('id', 'coopcycle__app');
-    document.body.append(rootEl);
+      scripts.forEach(src => {
+        const script = document.createElement('script');
+        script.setAttribute('src', src);
+        document.body.append(script);
+      })
 
-    let modal = renderApp(rootEl, false, baseURL, restaurantId, stripePublishableKey);
+      const rootEl = document.createElement('div');
+      rootEl.setAttribute('id', 'coopcycle__app');
+      document.body.append(rootEl);
 
-    el.addEventListener('click', (e) => {
-      modal = renderApp(rootEl, true, baseURL, restaurantId, stripePublishableKey)
-    });
+      let modal = renderApp(rootEl, false, baseURL, restaurantId, stripePublishableKey);
 
+      el.addEventListener('click', (e) => {
+        modal = renderApp(rootEl, true, baseURL, restaurantId, stripePublishableKey)
+      });
+
+    }
   }
+
 }
 
 // Here goes the public API under the "Coopcycle" global variable
-module.exports = {}
+module.exports = {
+  Client,
+}

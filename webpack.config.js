@@ -1,10 +1,10 @@
 var webpackConfig = {
-    entry: ['whatwg-fetch', './src/index.js'],
+    entry: './src/index.js',
     output: {
         path: __dirname + '/build',
         filename: 'coopcycle.js',
         library: 'Coopcycle',
-        libraryTarget: 'var',
+        libraryTarget: 'umd',
     },
     module: {
         loaders: [
@@ -19,6 +19,14 @@ var webpackConfig = {
             }, {
                 test: /\.json$/,
                 loader: 'json-loader'
+            },
+            // See https://github.com/kenny-hibino/react-places-autocomplete/issues/103
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                loaders: [
+                    'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+                    'image-webpack-loader'
+                ]
             }
         ]
     },

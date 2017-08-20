@@ -1,4 +1,6 @@
+require('isomorphic-fetch')
 import localforage from 'localforage'
+import FormData from 'form-data'
 
 var doLogin = function(baseURL, username, password) {
 
@@ -71,7 +73,7 @@ var refreshToken = function(baseURL, refreshToken) {
   });
 };
 
-class Client {
+export default class Client {
 
 
   constructor(httpBaseURL, credentials) {
@@ -232,5 +234,3 @@ class Client {
   }
 
 }
-
-export default Client;
