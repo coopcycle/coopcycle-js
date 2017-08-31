@@ -65,18 +65,17 @@ var refreshToken = function(baseURL, refreshToken) {
     fetch(request)
       .then(function(response) {
         if (response.ok) {
-          return response.json().then((credentials) => resolve(credentials));
+          return response.json().then(credentials => resolve(credentials))
         }
 
-        return response.json().then((json) => reject(json.message));
+        return response.json().then(json => reject(json.message))
       });
   });
 };
 
 export default class Client {
 
-
-  constructor(httpBaseURL, credentials) {
+  constructor(httpBaseURL, credentials, options) {
     /*
       @param {string} httpBaseURL: URL for the Coopcycle API server - ex: https://coopcyle.org
       @constructor
@@ -84,6 +83,7 @@ export default class Client {
 
     this.httpBaseURL = httpBaseURL;
     this.credentials = credentials;
+    this.options = options || {};
   }
 
   createRequest(method, uri, data, headers) {
@@ -155,37 +155,68 @@ export default class Client {
     @param {object} req: request object
     */
 
+    const retry = (req, credentials, resolve, reject) => {
+      console.log('Retrying request...')
+      req.headers.set('Authorization', 'Bearer ' + credentials.token);
+      return this.fetch(req)
+        .then(data => resolve(data))
+    }
+
     return new Promise((resolve, reject) => {
-      fetch(req)
+      return fetch(req)
         .then((response) => {
           if (response.ok) {
-            return response.json().then((data) => resolve(data));
-          }
-          else {
-            response.json().then(function (data) {
-              switch (response.status) {
-
-                case 401:
-                  if (data.message === 'Bad credentials' && this.credentials['refresh_token']) {
-                    console.log('Request is not authorized, refreshing token...');
+            return response.json().then(data => resolve(data));
+          } else {
+            response.json().then(data => {
+              // 401 Unauthorized
+              if (response.status === 401) {
+                switch (data.message) {
+                  case 'Expired JWT Token':
+                    console.log('Token is expired, refreshing...');
+                    // Try to refresh token
                     return refreshToken(this.httpBaseURL, this.credentials['refresh_token'])
-                      .then((credentials) => {
+                      // Token has been refreshed
+                      .then(credentials => {
                         console.log('Storing new credentials...');
-                        // FIXME This is async
-                        localforage.setItem('coopcyle__api_credentials', credentials);
-
-                        req.headers.set('Authorization', 'Bearer ' + credentials.token);
-                        return this.fetch(req);
+                        try {
+                          // FIXME This is async
+                          localforage.setItem('coopcyle__api_credentials', credentials);
+                        } catch (e) {
+                          console.log(e);
+                        }
+                        // Make sure initial Promise is actually resolved
+                        return retry(req, credentials, resolve, reject)
                       })
-                      .catch((err) => {
-                        console.log('Refresh token is not valid ' + credentials['refresh_token']);
-                        throw 'Invalid refresh token';
-                      });
-                  }
-                  break;
-
-                default:
-                  reject(data);
+                      // Refresh token is expired
+                      .catch(err => {
+                        console.log('Refresh token is expired');
+                        if (this.options.hasOwnProperty('autoLogin')) {
+                          console.log('Trying auto login...');
+                          return this.options
+                            .autoLogin(this)
+                            .then(credentials => {
+                              try {
+                                // FIXME This is async
+                                localforage.setItem('coopcyle__api_credentials', credentials);
+                              } catch (e) {
+                                console.log(e);
+                              }
+                              // Make sure initial Promise is actually resolved
+                              return retry(req, credentials, resolve, reject)
+                            })
+                            .catch(err => reject(err))
+                        }
+                        // No way to authenticate
+                        console.log('Could not authenticate');
+                        return reject(err)
+                      })
+                    break;
+                  case 'Bad credentials':
+                    break;
+                }
+              } else {
+                return reject(data);
               }
             });
           }
@@ -207,14 +238,15 @@ export default class Client {
 
         this.credentials = credentials;
 
-        // FIXME This is async
-        localforage.setItem('coopcyle__api_credentials', credentials);
+        try {
+          // FIXME This is async
+          localforage.setItem('coopcyle__api_credentials', credentials);
+        } catch (e) {
+          console.log(e);
+        }
 
         return credentials;
       })
-      .catch((err) => {
-        throw err;
-      });
   }
 
   register(email, username, password) {
@@ -223,14 +255,15 @@ export default class Client {
 
         this.credentials = credentials;
 
-        // FIXME This is async
-        localforage.setItem('coopcyle__api_credentials', credentials);
+        try {
+          // FIXME This is async
+          localforage.setItem('coopcyle__api_credentials', credentials);
+        } catch (e) {
+          console.log(e);
+        }
 
         return credentials;
       })
-      .catch((err) => {
-        throw err;
-      });
   }
 
 }
