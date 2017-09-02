@@ -24,6 +24,8 @@ const cartItems = (state = [], action) => {
       return newState;
     case 'REMOVE_FROM_CART':
       return _.filter(state, (item) => item !== action.cartItem);
+    case 'CREATE_ORDER_SUCCESS':
+      return []
     default:
       return state
   }

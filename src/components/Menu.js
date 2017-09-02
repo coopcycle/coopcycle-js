@@ -3,6 +3,7 @@ import { ListGroup, ListGroupItem, Row, Col, Panel } from 'react-bootstrap';
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
+import Scroll  from 'react-scroll'
 import { addToCart } from '../actions'
 
 class Menu extends Component {
@@ -14,7 +15,7 @@ class Menu extends Component {
     }
 
     return (
-      <div key={ section.name }>
+      <Scroll.Element name={ section.name } key={ section.name }>
         <h4>{ section.name }</h4>
         <ListGroup>
         { section.hasMenuItem.map((item) =>
@@ -23,13 +24,13 @@ class Menu extends Component {
           </ListGroupItem>
         ) }
         </ListGroup>
-      </div>
+      </Scroll.Element>
     )
   }
 
   render() {
     return (
-      <div>
+      <div id="scrollable" style={{ position: 'relative', height: '632px', overflow:'scroll', }}>
       { _.map(this.props.menu.hasMenuSection, (section) => this.renderSection(section)) }
       </div>
     )

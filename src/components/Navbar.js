@@ -32,7 +32,7 @@ class Navbar_ extends Component {
       <Navbar fluid style={ navbarStyle }>
         <Navbar.Header>
           <Navbar.Brand>
-            <a>Restaurant</a>
+            <a>{ this.props.restaurantName }</a>
           </Navbar.Brand>
         </Navbar.Header>
         <Navbar.Collapse>
@@ -64,6 +64,7 @@ function mapStateToProps(state, props) {
     user: state.user,
     cartAddress: state.cartAddress,
     total: cartTotal(state.cartItems),
+    restaurantName: state.restaurant ? state.restaurant.name : 'Restaurant'
   };
 }
 

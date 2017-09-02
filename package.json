@@ -21,7 +21,8 @@
     "form-data": "^2.2.0",
     "isomorphic-fetch": "^2.2.1",
     "localforage": "^1.5.0",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "react-scroll": "^1.5.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
