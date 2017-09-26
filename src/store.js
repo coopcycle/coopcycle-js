@@ -1,13 +1,18 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import reducers from './reducers'
 import thunk from 'redux-thunk'
 import localforage from 'localforage'
 
-const middleware = [ thunk ];
+const middlewares = [ thunk ]
+
+// enhancing redux dev tools only work when window exists
+// which is not the case at bundle time neither at server side render time
+const composeEnhancers = (typeof window !== 'undefined' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose
 
 const store = createStore(
   reducers,
-  applyMiddleware(...middleware)
+  composeEnhancers(applyMiddleware(...middlewares))
 )
 
 store.subscribe(() => {
