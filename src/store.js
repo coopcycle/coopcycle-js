@@ -5,8 +5,9 @@ import localforage from 'localforage'
 
 const middlewares = [ thunk ]
 
-// enhancing redux dev tools only work when window exists
-// which is not the case at bundle time neither at server side render time
+// we maye want enhancing redux dev tools only  in dev ?
+// also if server side render is made later, it is
+// better to add a guard here
 const composeEnhancers = (typeof window !== 'undefined' &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose
 
