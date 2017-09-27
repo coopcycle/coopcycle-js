@@ -1,13 +1,19 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux'
 import reducers from './reducers'
 import thunk from 'redux-thunk'
 import localforage from 'localforage'
 
-const middleware = [ thunk ];
+const middlewares = [ thunk ]
+
+// we maye want enhancing redux dev tools only  in dev ?
+// also if server side render is made later, it is
+// better to add a guard here
+const composeEnhancers = (typeof window !== 'undefined' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose
 
 const store = createStore(
   reducers,
-  applyMiddleware(...middleware)
+  composeEnhancers(applyMiddleware(...middlewares))
 )
 
 store.subscribe(() => {
