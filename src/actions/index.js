@@ -1,8 +1,8 @@
-import localforage from 'localforage'
-import Client from '../client'
+import localforage from 'localforage';
+import Client from '../client';
 
-export const addToCart = menuItem => {
-  return { type: 'ADD_TO_CART', menuItem }
+export const addToCart = (menuItem, modifiers = {}) => {
+  return { type: 'ADD_TO_CART', 'menuItem': menuItem, 'selectedModifiers': modifiers};
 }
 
 export const removeFromCart = cartItem => {
@@ -83,10 +83,22 @@ const createAddress = (client, payload) => {
 
 const createOrderPayload = (restaurant, cartItems, cartAddress, deliveryDate) => {
   const orderedItem = _.map(cartItems, (item) => {
+    let modifiers = [];
+
+    _.forOwn(item.selectedModifiers, (item, key) => {
+      modifiers.push({
+        name: item.name,
+        description: item.description,
+        modifier: key
+      });
+
+    });
+
     return {
       quantity: item.quantity,
-      menuItem: item.menuItem['@id']
-    }
+      menuItem: item.menuItem['@id'],
+      modifiers: modifiers
+    };
   });
 
   return {

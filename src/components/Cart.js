@@ -14,17 +14,25 @@ class Cart extends Component {
     this.props.history.push(this.props.isAuthenticated ? '/checkout' : '/login')
   }
 
+  displayModifiers (modifiers) {
+    return _.map(_.values(modifiers), (value) => {
+      return value.name;
+    }, '').join(', ');
+  }
+
   renderCartItems() {
     return (
       <ListGroup>
-      { this.props.cartItems.map((item) =>
-        <ListGroupItem key={ item.menuItem['@id'] }>
+      { this.props.cartItems.map((item, key) =>
+        <ListGroupItem key={ key }>
           { item.menuItem.name }
           <span className="quantity text-muted">×{ item.quantity }</span>
           <button type="button" className="close pull-right" aria-label="Close"
             onClick={ () => this.props.actions.removeFromCart(item) }>
             <span aria-hidden="true">×</span>
           </button>
+          <br />
+          <span>{ this.displayModifiers(item.selectedModifiers) }</span>
         </ListGroupItem>
       ) }
       </ListGroup>

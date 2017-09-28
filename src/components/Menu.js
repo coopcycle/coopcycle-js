@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Row, Col, Panel } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 import _ from 'lodash';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux'
-import Scroll  from 'react-scroll'
-import { addToCart } from '../actions'
+import { connect } from 'react-redux';
+import Scroll  from 'react-scroll';
+import MenuItem from './MenuItem';
 
 class Menu extends Component {
 
@@ -18,11 +17,11 @@ class Menu extends Component {
       <Scroll.Element name={ section.name } key={ section.name }>
         <h4>{ section.name }</h4>
         <ListGroup>
-        { section.hasMenuItem.map((item) =>
-          <ListGroupItem key={ item['@id'] } onClick={() => { this.props.actions.addToCart(item) }}>
-          { item.name } <span className="pull-right">{ item.offers.price } €</span>
-          </ListGroupItem>
-        ) }
+        {
+          section.hasMenuItem.map((item, key) => {
+            return (<MenuItem key={ key } item={ item } />);
+          })
+        }
         </ListGroup>
       </Scroll.Element>
     )
@@ -46,7 +45,7 @@ function mapStateToProps(state, props) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators({ addToCart }, dispatch)
+
   }
 }
 
