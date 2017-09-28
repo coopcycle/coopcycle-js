@@ -189,6 +189,17 @@ const isOpen = (state = true, action) => {
   }
 }
 
+const deliveryDate = (state = true, action) => {
+  switch (action.type) {
+    case 'INITIALIZE':
+      return action.deliveryDate;
+    case 'SET_DELIVERY_DATE':
+      return action.date;
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   cartItems,
   cartAddress,
@@ -201,5 +212,6 @@ export default combineReducers({
   createAddressRequest,
   checkDistanceRequest,
   showAddressForm,
-  isOpen
+  isOpen,
+  deliveryDate
 })

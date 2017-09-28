@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { withRouter } from 'react-router-dom'
 import { removeFromCart } from '../actions'
 import { cartTotal } from '../utils'
+import DatePicker from './DatePicker'
 
 class Cart extends Component {
 
@@ -46,6 +47,8 @@ class Cart extends Component {
 
     return (
       <Panel className="cart" header={title}>
+        <DatePicker />
+        <hr />
         { this.props.cartItems.length > 0 ? this.renderCartItems(): (
           <Alert bsStyle="warning">Votre panier est vide</Alert>
         ) }

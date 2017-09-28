@@ -32,6 +32,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "file-loader": "^0.11.2",
     "image-webpack-loader": "^3.3.1",
+    "moment": "^2.18.1",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.2",
     "react-dom": "^15.6.1",

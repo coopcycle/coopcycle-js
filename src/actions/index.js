@@ -25,15 +25,19 @@ const loadRestaurant = (client, restaurantId) => {
   return client.get('/api/restaurants/' + restaurantId)
 }
 
+const loadDeliveryDate = () => {
+  return localforage.getItem('deliveryDate')
+}
+
 export const initialize = (baseURL, restaurantId) => (dispatch, getState) => {
   localforage.getItem('coopcyle__api_credentials')
     .then(credentials => {
       const client = new Client(baseURL, credentials)
 
-      Promise.all([ loadRestaurant(client, restaurantId), loadCartItems(), loadCartAddress(), loadUser() ])
+      Promise.all([ loadRestaurant(client, restaurantId), loadCartItems(), loadCartAddress(), loadUser(), loadDeliveryDate() ])
         .then(values => {
-          const [ restaurant, cartItems, cartAddress, user ] = values;
-          dispatch({ type: 'INITIALIZE', client, cartItems, cartAddress, user, restaurant })
+          const [ restaurant, cartItems, cartAddress, user, deliveryDate ] = values;
+          dispatch({ type: 'INITIALIZE', client, cartItems, cartAddress, user, restaurant, deliveryDate })
         })
     })
 }
@@ -77,7 +81,7 @@ const createAddress = (client, payload) => {
   return client.post('/api/me/addresses', payload)
 }
 
-const createOrderPayload = (restaurant, cartItems, cartAddress) => {
+const createOrderPayload = (restaurant, cartItems, cartAddress, deliveryDate) => {
   const orderedItem = _.map(cartItems, (item) => {
     return {
       quantity: item.quantity,
@@ -89,6 +93,7 @@ const createOrderPayload = (restaurant, cartItems, cartAddress) => {
     restaurant: restaurant['@id'],
     orderedItem: orderedItem,
     delivery: {
+      date: deliveryDate,
       deliveryAddress: cartAddress['@id']
     }
   }
@@ -105,17 +110,17 @@ const createOrder = (client, payload, stripeToken) => {
 
 export const finalizeOrder = (stripeToken) => (dispatch, getState) => {
 
-  const { client, restaurant, cartItems, cartAddress } = getState();
+  const { client, restaurant, cartItems, cartAddress, deliveryDate } = getState();
   const isNewAddress = !cartAddress.hasOwnProperty('@id');
 
   dispatch({ type: 'CREATE_ORDER_REQUEST' });
 
   if (isNewAddress) {
     createAddress(client, cartAddress)
-      .then(newAddress => createOrder(client, createOrderPayload(restaurant, cartItems, newAddress), stripeToken))
+      .then(newAddress => createOrder(client, createOrderPayload(restaurant, cartItems, newAddress, deliveryDate), stripeToken))
       .then(order => dispatch({ type: 'CREATE_ORDER_SUCCESS', order }))
   } else {
-    createOrder(client, createOrderPayload(restaurant, cartItems, cartAddress), stripeToken)
+    createOrder(client, createOrderPayload(restaurant, cartItems, cartAddress, deliveryDate), stripeToken)
       .then(order => dispatch({ type: 'CREATE_ORDER_SUCCESS', order }))
   }
 
@@ -135,4 +140,9 @@ export const checkDistance = () => (dispatch, getState) => {
   client.get(restaurant['@id'] + '/can-deliver/' + cartAddress.geo.latitude + ',' + cartAddress.geo.longitude)
     .then(response => dispatch({ type: 'CHECK_DISTANCE_SUCCESS' }))
     .catch(e => dispatch({ type: 'CHECK_DISTANCE_FAILURE' }))
+}
+
+export const setDeliveryDate = (date) => {
+  console.log(date)
+  return { type: 'SET_DELIVERY_DATE', date }
 }

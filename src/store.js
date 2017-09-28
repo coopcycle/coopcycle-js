@@ -22,6 +22,7 @@ store.subscribe(() => {
   localforage.setItem('cartAddress', state.cartAddress)
   localforage.setItem('credentials', state.credentials)
   localforage.setItem('user', state.user)
+  localforage.setItem('deliveryDate', state.deliveryDate)
 })
 
 export default store
