@@ -26,7 +26,7 @@ class Navbar_ extends Component {
 
   render() {
 
-    const isAuthenticated = !!this.props.user
+    const isAuthenticated = !!this.props.user;
 
     return (
       <Navbar fluid style={ navbarStyle }>
@@ -39,6 +39,7 @@ class Navbar_ extends Component {
           <Nav>
             <NavItem>Livraison : <strong>{ this.props.cartAddress && this.props.cartAddress.streetAddress }</strong></NavItem>
             { this.props.cartAddress &&
+              this.props.history.location.pathname !== '/' &&
             <NavItem onClick={ () => this.props.history.push('/') }>Modifier</NavItem> }
           </Nav>
           <Nav pullRight>
