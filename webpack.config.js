@@ -1,5 +1,11 @@
+var webpack = require('webpack');
 var webpackConfig = {
-    entry: './src/index.js',
+    entry: [
+      'webpack-dev-server/client?http://localhost:9090', // WebpackDevServer host and port
+      'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
+      'react-hot-loader/patch',
+      './src/index.js'
+    ],
     output: {
         path: __dirname + '/build',
         filename: 'coopcycle.js',
@@ -30,11 +36,16 @@ var webpackConfig = {
             }
         ]
     },
+    plugins: [
+      new webpack.NamedModulesPlugin(),
+      new webpack.HotModuleReplacementPlugin()
+    ],
     devServer: {
         headers: { "Access-Control-Allow-Origin": "*" },
         stats: 'minimal',
         port: 9090,
         compress: true,
+        hot: true
     }
 };
 

@@ -1,8 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Modal from 'react-modal'
-import App from './app'
-import Client from './client'
+import Modal from 'react-modal';
+import App from './app';
+import Client from './client';
+
+import 'react-hot-loader/patch';
+import { AppContainer } from 'react-hot-loader';
 
 const modalStyle = {
   overlay: {
@@ -16,18 +19,38 @@ const modalStyle = {
     padding       : 0,
     borderRadius  : 0
   }
-}
+};
 
 const renderApp = (el, isOpen, baseURL, restaurantId, stripePublishableKey) => {
-  return render(
-    <Modal isOpen={ isOpen } contentLabel="Commander" style={ modalStyle }>
-      <App
-        baseURL={ baseURL }
-        restaurantId={ restaurantId }
-        stripePublishableKey={ stripePublishableKey }
-        onClose={ () => renderApp(el, false, baseURL, restaurantId, stripePublishableKey) }
-        isOpen={ isOpen } />
-    </Modal>, el);
+
+  render(
+    <AppContainer>
+      <Modal isOpen={ isOpen } contentLabel="Commander" style={ modalStyle }>
+        <App
+          baseURL={ baseURL }
+          restaurantId={ restaurantId }
+          stripePublishableKey={ stripePublishableKey }
+          onClose={ () => renderApp(el, false, baseURL, restaurantId, stripePublishableKey) }
+          isOpen={ isOpen } />
+      </Modal>
+    </AppContainer>,
+    el);
+
+  if (module.hot) {
+    module.hot.accept('./app.js', () => {
+      const NextApp = require('./app.js').default;
+      render(
+        <Modal isOpen={isOpen} contentLabel="Commander" style={modalStyle}>
+          <NextApp
+            baseURL={baseURL}
+            restaurantId={restaurantId}
+            stripePublishableKey={stripePublishableKey}
+            onClose={() => renderApp(el, false, baseURL, restaurantId, stripePublishableKey)}
+            isOpen={isOpen}/>
+        </Modal>,
+        el);
+    });
+  }
 }
 
 if (typeof window !== 'undefined') {
