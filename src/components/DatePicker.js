@@ -13,14 +13,15 @@ class DatePicker extends Component {
 
   constructor (props) {
     super(props);
-
     const { availabilities } = this.props;
-    const days = _.groupBy(availabilities, date => moment(date).format('YYYY-MM-DD'));
-    const dates = _.keys(days);
-    const availableTimes = days[_.first(dates)].map(date => moment(date).format('HH:mm'));
-
+    let availableTimes
+    if (availabilities) {
+      const days = _.groupBy(availabilities, date => moment(date).format('YYYY-MM-DD'));
+      const dates = _.keys(days);
+      availableTimes = days[_.first(dates)].map(date => moment(date).format('HH:mm'));
+    }
     this.state = {
-      'availableTimes': availableTimes
+      'availableTimes': availableTimes || []
     };
   }
 
