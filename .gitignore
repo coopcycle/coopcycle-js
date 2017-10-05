@@ -2,3 +2,4 @@
 /bin/
 /example/*
 !example/index.html
+.idea

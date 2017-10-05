@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import _ from 'lodash';
-import Client from '../client'
+import hash from 'object-hash';
 
 const cartItems = (state = [], action) => {
 
@@ -11,11 +11,14 @@ const cartItems = (state = [], action) => {
       return action.cartItems || [];
     case 'ADD_TO_CART':
       newState = state.slice();
-      cartItem = _.find(newState, (item) => item.menuItem['@id'] === action.menuItem['@id']);
+      cartItem = _.find(newState, (item) => {
+        return (item.menuItem['@id'] === action.menuItem['@id'] && hash(item.selectedModifiers) === hash(action.selectedModifiers));
+      });
       if (cartItem) {
         ++cartItem.quantity;
       } else {
         cartItem = {
+          selectedModifiers: action.selectedModifiers,
           menuItem: action.menuItem,
           quantity: 1
         }

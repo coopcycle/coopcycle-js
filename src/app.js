@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Provider } from 'react-redux'
-import { StripeProvider } from 'react-stripe-elements'
-import { Grid, Row, Col } from 'react-bootstrap'
-import { MenuPage, LoginPage, RegisterPage, CheckoutPage, ConfirmPage, AddressPage } from './pages'
-import { HashRouter as Router, Route } from 'react-router-dom'
-import { initialize } from './actions'
-import store from './store'
+import { StripeProvider } from 'react-stripe-elements';
+import { MenuPage, LoginPage, RegisterPage, CheckoutPage, ConfirmPage, AddressPage } from './pages';
+import { HashRouter as Router, Route } from 'react-router-dom';
+import { initialize } from './actions';
+import store from './store';
 
 class App extends Component {
 
