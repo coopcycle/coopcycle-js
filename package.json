@@ -5,7 +5,7 @@
   "main": "build/coopcycle.js",
   "scripts": {
     "example": "webpack-dev-server --content-base=example/",
-    "build": "webpack -p"
+    "build": "NODE_ENV=production webpack -p"
   },
   "repository": {
     "type": "git",

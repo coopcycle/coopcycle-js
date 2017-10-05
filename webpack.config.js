@@ -1,11 +1,17 @@
 var webpack = require('webpack');
+
+let entry = [
+  './src/index.js'
+];
+
+if (process.env.NODE_ENV !== 'production') {
+  entry.push('webpack-dev-server/client?http://localhost:9090'); // WebpackDevServer host and port
+  entry.push('webpack/hot/only-dev-server'); // "only" prevents reload on syntax errors
+  entry.push('react-hot-loader/patch');
+}
+
 var webpackConfig = {
-    entry: [
-      'webpack-dev-server/client?http://localhost:9090', // WebpackDevServer host and port
-      'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
-      'react-hot-loader/patch',
-      './src/index.js'
-    ],
+    entry,
     output: {
         path: __dirname + '/build',
         filename: 'coopcycle.js',
@@ -16,7 +22,7 @@ var webpackConfig = {
         loaders: [
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
+                exclude: /node_modules(?!\/webpack-dev-server)/,
                 include: __dirname + '/src',
                 loader: "babel-loader",
                 query: {
