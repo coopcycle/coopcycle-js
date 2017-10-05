@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
-import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Glyphicon } from 'react-bootstrap';
 import _ from 'lodash'
 import { disconnect, closeModal } from '../actions'
 import { cartTotal } from '../utils'
+
+import applicolisLogo from '../../assets/applicolis-logo.png'
+import coopCycleLogo from '../../assets/coopcycle-logo.png'
 
 const navbarStyle = {
   marginLeft    : '-15px',
@@ -29,18 +32,27 @@ class Navbar_ extends Component {
     const isAuthenticated = !!this.props.user;
 
     return (
-      <Navbar fluid style={ navbarStyle }>
+      <Navbar inverse fluid style={ navbarStyle }>
         <Navbar.Header>
           <Navbar.Brand>
             <a>{ this.props.restaurantName }</a>
           </Navbar.Brand>
         </Navbar.Header>
         <Navbar.Collapse>
+          <Nav className="brands">
+            <NavItem><img src={ applicolisLogo } /></NavItem>
+          </Nav>
+          <Nav>
+            <NavItem>+</NavItem>
+          </Nav>
+          <Nav className="brands">
+            <NavItem><img src={ coopCycleLogo } />  <span className="coopcycle-brand">CoopCycle</span></NavItem>
+          </Nav>
           <Nav>
             <NavItem>Livraison : <strong>{ this.props.cartAddress && this.props.cartAddress.streetAddress }</strong></NavItem>
             { this.props.cartAddress &&
               this.props.history.location.pathname !== '/' &&
-            <NavItem onClick={ () => this.props.history.push('/') }>Modifier</NavItem> }
+            <NavItem onClick={ () => this.props.history.push('/') }><Glyphicon glyph="pencil" /></NavItem> }
           </Nav>
           <Nav pullRight>
             <NavItem><strong>Total</strong>  { this.props.total } €</NavItem>

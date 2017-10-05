@@ -36,10 +36,10 @@ const MenuPage = ({ cartAddress, openingHours }) => {
             </div>
           ) }
         </div>
-        <div style={{ flex: 2, padding: '0 15px' }}>
+        <div style={{ flex: 3, padding: '0 15px' }}>
           <Menu />
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 2 }}>
           <Cart />
         </div>
       </div>
