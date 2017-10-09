@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 let entry = [
   './src/index.js'
@@ -8,6 +9,10 @@ if (process.env.NODE_ENV !== 'production') {
   entry.push('webpack-dev-server/client?http://localhost:9090'); // WebpackDevServer host and port
   entry.push('webpack/hot/only-dev-server'); // "only" prevents reload on syntax errors
   entry.push('react-hot-loader/patch');
+}
+
+if (process.env.STRIPE_PUBLISHABLE_KEY === undefined || process.env.GOOGLE_MAPS_API_KEY=== undefined) {
+  throw "Please pass your Stripe publishable key and your Google Maps API key thanks to env variables";
 }
 
 var webpackConfig = {
@@ -43,6 +48,14 @@ var webpackConfig = {
         ]
     },
     plugins: [
+      new HtmlWebpackPlugin({
+        'template': 'src/index.ejs',
+
+        // pass variables
+        STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
+        API_URL: process.env.API_URL || 'http://localhost',
+        GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
+      }),
       new webpack.NamedModulesPlugin(),
       new webpack.HotModuleReplacementPlugin()
     ],

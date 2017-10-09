@@ -50,11 +50,12 @@
     <body>
         <p class="text-center">
             <button class="btn btn-success" rel="coopcycle"
-                data-base-url="http://localhost"
+                data-base-url="<%= htmlWebpackPlugin.options.API_URL %>"
                 data-restaurant-id="1"
-                data-stripe-publishable-key="pk_test_fvLChNxPPlcbMDlzuTljlgpL"
-                data-google-api-key="AIzaSyCAqNf8X0elLLXv5yeh0btsYpq47eCzIAw">Commander</button>
+                data-stripe-publishable-key="<%= htmlWebpackPlugin.options.STRIPE_PUBLISHABLE_KEY %>"
+                data-google-api-key="<%= htmlWebpackPlugin.options.GOOGLE_MAPS_API_KEY %>">
+                Commander
+            </button>
         </p>
-        <script src="/coopcycle.js"></script>
     </body>
 </html>
