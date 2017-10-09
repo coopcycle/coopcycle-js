@@ -10,7 +10,7 @@
   "description": "",
   "main": "build/coopcycle.js",
   "scripts": {
-    "build": "NODE_ENV=production node_modules/webpack/bin/webpack.js -p --bail --config ./bundler/prod.config.js",
+    "build": "NODE_ENV=production node_modules/webpack/bin/webpack.js -p --bail --config ./webpack/prod.config.js",
     "example": "NODE_ENV=webpack node ./webpack/webpackDevServer.js"
   },
   "repository": {
