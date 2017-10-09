@@ -1,18 +1,11 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
-
-const ROOT_DIR = path.join(__dirname, '../')
-
-if (process.env.STRIPE_PUBLISHABLE_KEY === undefined || process.env.GOOGLE_MAPS_API_KEY === undefined) {
-  throw "Please pass your Stripe publishable key and your Google Maps API key thanks to env variables";
-}
 
 module.exports = {
   entry: {
     index: [
       'babel-polyfill',
-      path.join(ROOT_DIR, 'src/index.js')
+      path.join(__dirname, '../src/index.js')
     ]
   },
   module: {
@@ -47,21 +40,13 @@ module.exports = {
     ]
   },
   output: {
-    path: __dirname + '/build',
+    path: path.join(__dirname + '../build'),
     filename: 'coopcycle.js',
     library: 'Coopcycle',
     libraryTarget: 'umd',
-    publicPath: '/build',
+    publicPath: '/',
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      'template': 'src/index.ejs',
-
-      // pass variables
-      STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
-      API_URL: process.env.API_URL || 'http://localhost',
-      GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
-    }),
     new webpack.NamedModulesPlugin()
   ]
 }

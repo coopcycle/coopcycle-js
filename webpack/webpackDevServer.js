@@ -2,7 +2,8 @@ const webpack = require('webpack')
 const WebpackDevServer = require('webpack-dev-server')
 
 const devConfig = require('./dev.config')
-const { host,
+const { contentBase,
+  host,
   port,
   url
 } = require('./server.config.js')
@@ -11,7 +12,7 @@ new WebpackDevServer(
   webpack(devConfig),
   {
     compress: true,
-    contentBase: 'example/',
+    contentBase,
     headers: {
       // it is important to not set a wildcard for security reason
       'Access-Control-Allow-Origin': url
