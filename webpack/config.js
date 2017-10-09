@@ -1,9 +1,10 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
 
 const ROOT_DIR = path.join(__dirname, '../')
 
-if (process.env.STRIPE_PUBLISHABLE_KEY === undefined || process.env.GOOGLE_MAPS_API_KEY=== undefined) {
+if (process.env.STRIPE_PUBLISHABLE_KEY === undefined || process.env.GOOGLE_MAPS_API_KEY === undefined) {
   throw "Please pass your Stripe publishable key and your Google Maps API key thanks to env variables";
 }
 
@@ -19,11 +20,8 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules(?!\/webpack-dev-server)/,
-        include: __dirname + '/src',
-        loader: "babel-loader",
-        query: {
-            presets: ['es2015', 'react']
-          }
+        include: path.join(__dirname, '../src'),
+        loader: "babel-loader"
       },
       {
         test: /\.json$/,

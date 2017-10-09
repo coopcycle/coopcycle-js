@@ -1,5 +1,13 @@
+const fs = require('fs')
+const env = require('node-env-file')
 const path = require('path')
 const webpack = require('webpack')
+
+const secretDir = path.join(__dirname, '../secret.sh')
+if (!fs.existsSync(secretDir)) {
+  throw "Please define your Stripe publishable key and your Google Maps API key thanks in the secret.sh file"
+}
+env(secretDir)
 
 const config = require('./config')
 const { url } = require('./server.config.js')
