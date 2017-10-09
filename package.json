@@ -35,6 +35,7 @@
     "html-webpack-plugin": "^2.30.1",
     "image-webpack-loader": "^3.3.1",
     "moment": "^2.18.1",
+    "node-env-file": "^0.1.8",
     "react": "^15.6.1",
     "react-bootstrap": "^0.31.2",
     "react-dom": "^15.6.1",
