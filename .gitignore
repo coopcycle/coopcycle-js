@@ -4,3 +4,4 @@
 /example/*
 !example/index.html
 .idea
+/secret.sh
