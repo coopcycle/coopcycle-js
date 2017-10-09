@@ -192,7 +192,7 @@ const isOpen = (state = true, action) => {
   }
 }
 
-const deliveryDate = (state = true, action) => {
+const deliveryDate = (state = null, action) => {
   switch (action.type) {
     case 'INITIALIZE':
       return action.deliveryDate;
