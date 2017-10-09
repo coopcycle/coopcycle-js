@@ -10,8 +10,6 @@ const { contentBase,
   url
 } = require('./server.config.js')
 
-console.log('contentBase', contentBase)
-
 const secretDir = path.join(__dirname, '../secret.sh')
 if (!fs.existsSync(secretDir)) {
   throw "Please define your Stripe publishable key and your Google Maps API key thanks in the secret.sh file"
