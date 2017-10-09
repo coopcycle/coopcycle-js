@@ -139,10 +139,12 @@ const createOrderRequest = (state = asyncRequest, action) => {
       return { ...asyncRequest, loading: true };
     case 'CREATE_ORDER_SUCCESS':
     case 'CREATE_ORDER_FAILURE':
+      console.log(action);
       return {
         loading: false,
         success: action.type === 'CREATE_ORDER_SUCCESS',
         error: action.type === 'CREATE_ORDER_FAILURE',
+        apiErrorMessage: action.errorMessage
       };
     default:
       return state
@@ -159,6 +161,7 @@ const createAddressRequest = (state = asyncRequest, action) => {
         loading: false,
         success: action.type === 'CREATE_ADDRESS_SUCCESS',
         error: action.type === 'CREATE_ADDRESS_FAILURE',
+        errorMessage: action.errorMessage
       };
     default:
       return state

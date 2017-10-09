@@ -48,8 +48,9 @@ class CreditCardForm extends Component {
 
   render() {
 
-    const { loading, success, error } = this.props.createOrderRequest;
-    const { errorMessage } = this.state;
+    const { loading, success, error, apiErrorMessage } = this.props.createOrderRequest;
+    // console.log(this.props.createOrderRequest);
+    let errorMessage = apiErrorMessage || this.state.errorMessage;
 
     if (success) {
       return (
@@ -64,13 +65,13 @@ class CreditCardForm extends Component {
     return (
       <div>
         <Panel header={ title }>
+          { errorMessage && <Alert bsStyle="danger">{ errorMessage }</Alert> }
           <form onSubmit={ e => e.preventDefault() }>
             <FormGroup>
               <ControlLabel>Numéro de carte</ControlLabel>
               <CardElement hidePostalCode style={ cardElementStyle } />
             </FormGroup>
           </form>
-          { errorMessage && <Alert bsStyle="danger">{ errorMessage }</Alert> }
         </Panel>
         <Button disabled={ loading } bsSize="large" type="submit" block bsStyle="primary" onClick={ this.finalizeOrder.bind(this) }>
           Payer { this.props.total } €

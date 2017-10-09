@@ -37,7 +37,7 @@ export const initialize = (baseURL, restaurantId) => (dispatch, getState) => {
       Promise.all([ loadRestaurant(client, restaurantId), loadCartItems(), loadCartAddress(), loadUser(), loadDeliveryDate() ])
         .then(values => {
           const [ restaurant, cartItems, cartAddress, user, deliveryDate ] = values;
-          dispatch({ type: 'INITIALIZE', client, cartItems, cartAddress, user, restaurant, deliveryDate })
+          dispatch({ type: 'INITIALIZE', client, cartItems, cartAddress, user, restaurant, deliveryDate });
         })
     })
 }
@@ -111,13 +111,14 @@ const createOrderPayload = (restaurant, cartItems, cartAddress, deliveryDate) =>
   }
 }
 
-const createOrder = (client, payload, stripeToken) => {
+const createOrder = (client, payload) => {
   return client.post('/api/orders', payload)
-    .then((order) => {
-      return client.put(order['@id'] + '/pay', {
-        stripeToken: stripeToken.id
-      })
-    })
+}
+
+const createPayment = (client, order, stripeToken) => {
+    return client.put(order['@id'] + '/pay', {
+      stripeToken: stripeToken.id
+    });
 }
 
 export const finalizeOrder = (stripeToken) => (dispatch, getState) => {
@@ -129,11 +130,15 @@ export const finalizeOrder = (stripeToken) => (dispatch, getState) => {
 
   if (isNewAddress) {
     createAddress(client, cartAddress)
-      .then(newAddress => createOrder(client, createOrderPayload(restaurant, cartItems, newAddress, deliveryDate), stripeToken))
+      .then(newAddress => createOrder(client, createOrderPayload(restaurant, cartItems, newAddress, deliveryDate)))
+      .then(order => createPayment(client, order, stripeToken))
       .then(order => dispatch({ type: 'CREATE_ORDER_SUCCESS', order }))
+      .catch(err => dispatch({ type: 'CREATE_ORDER_FAILURE', errorMessage: err['hydra:description'] }))
   } else {
-    createOrder(client, createOrderPayload(restaurant, cartItems, cartAddress, deliveryDate), stripeToken)
+    createOrder(client, createOrderPayload(restaurant, cartItems, cartAddress, deliveryDate))
+      .then(order => createPayment(client, order, stripeToken))
       .then(order => dispatch({ type: 'CREATE_ORDER_SUCCESS', order }))
+      .catch(err => dispatch({ type: 'CREATE_ORDER_FAILURE', errorMessage: err['hydra:description'] }))
   }
 
   // TODO Error control
