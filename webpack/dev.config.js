@@ -11,10 +11,17 @@ const { contentBase,
 } = require('./server.config.js')
 
 const secretDir = path.join(__dirname, '../secret.sh')
-if (!fs.existsSync(secretDir)) {
-  throw "Please define your Stripe publishable key and your Google Maps API key thanks in the secret.sh file"
+fs.existsSync(secretDir) && env(secretDir)
+
+const { env: { API_URL,
+    GOOGLE_MAPS_API_KEY,
+    STRIPE_PUBLISHABLE_KEY
+  }
+} = process
+
+if (!GOOGLE_MAPS_API_KEY && !STRIPE_PUBLISHABLE_KEY) {
+  throw "Please define your Stripe publishable key and your Google Maps API key as env variables"
 }
-env(secretDir)
 
 module.exports = Object.assign({}, config,
   {
@@ -33,9 +40,9 @@ module.exports = Object.assign({}, config,
         'template': path.join(contentBase, 'index.ejs'),
 
         // pass variables
-        STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
-        API_URL: process.env.API_URL || `http://${host}`,
-        GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
+        STRIPE_PUBLISHABLE_KEY,
+        API_URL: API_URL || `http://${host}`,
+        GOOGLE_MAPS_API_KEY
       }),
       new webpack.HotModuleReplacementPlugin()
     ].concat(config.plugins)
