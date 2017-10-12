@@ -1,61 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Coopcycle Client Lib Demo</title>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
-        <style>
-          body {
-            font-family: 'Open Sans', sans-serif;
-            padding-top: 40px;
-          }
-          .cart .quantity {
-            margin-left: 5px;
-          }
-          button.list-group-item:focus {
-            outline:0;
-          }
-          input[type=radio] {
-            margin: 0 4px;
-          }
-          h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
-            font-family: 'Arvo', serif;
-          }
-          .coopcycle-brand {
-            font-size: 12px;
-          }
-          .brands img {
-            height: 23px;
-          }
-          body {
-            padding-top: 40px;
-          }
-          .cart .quantity {
-            margin-left: 5px;
-          }
-          .navbar-inverse {
-            background-color: #3C4A59;
-            border-color: #3C4A59;
-          }
-          .navbar-inverse .navbar-nav > li > a,
-          .navbar-inverse .navbar-brand {
-            color: #ECF0F1;
-          }
-          .close {
-            color: #fff;
-            text-shadow: none
-          }
-        </style>
+      <title>Coopcycle Client Lib Demo</title>
+      <meta charset="utf-8">
     </head>
     <body>
-        <p class="text-center">
-            <button class="btn btn-success" rel="coopcycle"
-                data-base-url="<%= htmlWebpackPlugin.options.API_URL %>"
-                data-restaurant-id="1"
-                data-stripe-publishable-key="<%= htmlWebpackPlugin.options.STRIPE_PUBLISHABLE_KEY %>"
-                data-google-api-key="<%= htmlWebpackPlugin.options.GOOGLE_MAPS_API_KEY %>">
-                Commander
-            </button>
-        </p>
+      <p class="text-center">
+        <button class="btn btn-success" rel="coopcycle"
+          data-base-url="<%= htmlWebpackPlugin.options.API_URL %>"
+          data-restaurant-id="1"
+          data-stripe-publishable-key="<%= htmlWebpackPlugin.options.STRIPE_PUBLISHABLE_KEY %>"
+          data-google-api-key="<%= htmlWebpackPlugin.options.GOOGLE_MAPS_API_KEY %>">
+            Commander
+        </button>
+      </p>
     </body>
 </html>
