@@ -1,40 +1,55 @@
+@import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
+
 body {
   font-family: 'Open Sans', sans-serif;
   padding-top: 40px;
 }
-.cart .quantity {
-  margin-left: 5px;
-}
+
 button.list-group-item:focus {
   outline:0;
 }
+
 input[type=radio] {
   margin: 0 4px;
 }
+
 h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
   font-family: 'Arvo', serif;
 }
-.coopcycle-brand {
-  font-size: 12px;
-}
-.brands img {
-  height: 23px;
-}
-body {
-  padding-top: 40px;
-}
-.cart .quantity {
-  margin-left: 5px;
-}
+
 .navbar-inverse {
   background-color: #3C4A59;
   border-color: #3C4A59;
 }
+
 .navbar-inverse .navbar-nav > li > a,
 .navbar-inverse .navbar-brand {
   color: #ECF0F1;
 }
+
+.brands img {
+  height: 23px;
+}
+
+.cart .quantity {
+  margin-left: 5px;
+}
+
 .close {
   color: #fff;
   text-shadow: none
+}
+
+.coopcycle-brand {
+  font-size: 12px;
+}
+
+.navbar-inverse {
+  background-color: #3C4A59;
+  border-color: #3C4A59;
+}
+
+.navbar-inverse .navbar-nav > li > a,
+.navbar-inverse .navbar-brand {
+  color: #ECF0F1;
 }
