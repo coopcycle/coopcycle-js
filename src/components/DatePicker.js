@@ -35,6 +35,10 @@ class DatePicker extends Component {
     this.props.actions.setDeliveryDate(date + ' ' + event.target.value + ':00')
   }
 
+  componentWillMount () {
+    this.props.actions.setDeliveryDate(this.props.date + ' ' + this.props.time + ':00')
+  }
+
   render() {
 
     const { availabilities } = this.props;
