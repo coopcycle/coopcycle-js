@@ -1,8 +1,9 @@
-import React, { Component } from 'react'
-import { Provider } from 'react-redux'
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
 import { StripeProvider } from 'react-stripe-elements';
+import { Grid, Row, Col, Alert} from 'react-bootstrap';
 import { MenuPage, LoginPage, RegisterPage, CheckoutPage, ConfirmPage, AddressPage } from './pages';
-import { HashRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import { initialize } from './actions';
 import store from './store';
 
@@ -11,7 +12,16 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    store.dispatch(initialize(props.baseURL, props.restaurantId));
+    this.state = {
+      initialized: false
+    };
+
+
+    // wait for initialization to be done to render anything
+    let unsubscribe = store.subscribe(() => {
+      this.setState({initialized: true});
+      unsubscribe();
+    });
 
     let currentValue = props.isOpen;
     store.subscribe(() => {
@@ -23,9 +33,24 @@ class App extends Component {
         }
       }
     });
+
+    store.dispatch(initialize(props.baseURL, props.restaurantId));
   }
 
   render() {
+
+    if (this.state.initialized !== true) {
+      return (
+        <Grid fluid>
+          <Row>
+            <Col md={8} mdOffset={2}>
+              <Alert bsStyle="warning">Chargement...</Alert>
+            </Col>
+          </Row>
+        </Grid>
+      );
+    }
+
     return (
       <Provider store={ store }>
         <StripeProvider apiKey={ this.props.stripePublishableKey }>
