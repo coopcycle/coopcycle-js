@@ -160,6 +160,5 @@ export const checkDistance = () => (dispatch, getState) => {
 }
 
 export const setDeliveryDate = (date) => {
-  console.log(date)
   return { type: 'SET_DELIVERY_DATE', date }
 }

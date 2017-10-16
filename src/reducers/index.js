@@ -139,7 +139,6 @@ const createOrderRequest = (state = asyncRequest, action) => {
       return { ...asyncRequest, loading: true };
     case 'CREATE_ORDER_SUCCESS':
     case 'CREATE_ORDER_FAILURE':
-      console.log(action);
       return {
         loading: false,
         success: action.type === 'CREATE_ORDER_SUCCESS',
