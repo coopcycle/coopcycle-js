@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux'
-import { withRouter, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux';
+import { withRouter, Redirect } from 'react-router-dom';
 import { Alert, Panel, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 import { authenticate } from '../actions'
 

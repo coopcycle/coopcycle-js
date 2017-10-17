@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Grid, Row, Col, Alert, Button} from 'react-bootstrap';
 import { Navbar, Cart } from '../components';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { withRouter, Redirect } from 'react-router-dom';
 import moment from 'moment';
+import { resetCheckout } from "../actions/index";
 
 
 moment.locale('fr');
@@ -12,10 +14,15 @@ moment.locale('fr');
 class ConfirmPage extends Component {
 
   onClick() {
-
+    this.props.actions.resetCheckout();
   }
 
   render () {
+
+    if (!this.props.order) {
+      return (<Redirect to={{ pathname: '/' }} />);
+    }
+
     const deliveryTime = moment(this.props.deliveryDate).format('HH[h]mm');
     const deliveryDate = moment(this.props.deliveryDate).format('dddd DD MMMM');
     const deliveryIsToday = moment(this.props.deliveryDate).isSame(Date.now());
@@ -60,4 +67,10 @@ function mapStateToPros (state) {
   }
 }
 
-export default withRouter(connect(mapStateToPros)(ConfirmPage))
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators({ resetCheckout }, dispatch)
+  }
+}
+
+export default withRouter(connect(mapStateToPros, mapDispatchToProps)(ConfirmPage))

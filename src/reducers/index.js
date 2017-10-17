@@ -27,6 +27,8 @@ const cartItems = (state = [], action) => {
       return newState;
     case 'REMOVE_FROM_CART':
       return _.filter(state, (item) => item !== action.cartItem);
+    case 'RESET_CHECKOUT':
+      return [];
     default:
       return state
   }
@@ -41,6 +43,8 @@ const cartAddress = (state = null, action) => {
       return action.address;
     case 'CREATE_ADDRESS_SUCCESS':
       return action.address['@id'];
+    case 'RESET_CHECKOUT':
+      return null;
     case 'DISCONNECT':
       if (state) {
         const isNewAddress = !state.hasOwnProperty('@id')
@@ -148,23 +152,8 @@ const createOrderRequest = (state = asyncRequest, action) => {
       return {
         order: action.order
       }
-    default:
-      return state
-  }
-}
-
-const createAddressRequest = (state = asyncRequest, action) => {
-  switch (action.type) {
-    case 'CREATE_ADDRESS_REQUEST':
-      return { ...asyncRequest, loading: true };
-    case 'CREATE_ADDRESS_SUCCESS':
-    case 'CREATE_ADDRESS_FAILURE':
-      return {
-        loading: false,
-        success: action.type === 'CREATE_ADDRESS_SUCCESS',
-        error: action.type === 'CREATE_ADDRESS_FAILURE',
-        errorMessage: action.errorMessage
-      };
+    case 'RESET_CHECKOUT':
+      return {};
     default:
       return state
   }
@@ -203,6 +192,8 @@ const deliveryDate = (state = null, action) => {
       return action.deliveryDate;
     case 'SET_DELIVERY_DATE':
       return action.date;
+    case 'RESET_CHECKOUT':
+      return null;
     default:
       return state
   }
@@ -217,7 +208,6 @@ export default combineReducers({
   user,
   authenticationRequest,
   createOrderRequest,
-  createAddressRequest,
   checkDistanceRequest,
   showAddressForm,
   isOpen,

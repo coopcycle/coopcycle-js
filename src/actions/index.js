@@ -1,5 +1,11 @@
 import localforage from 'localforage';
 import Client from '../client';
+import moment from 'moment';
+
+export const CART_ITEM_KEY = 'cartItems';
+export const CART_ADDRESS_KEY = 'cartAddress';
+export const DELIVERY_DATE_KEY = 'deliveryDate';
+export const ORDER_KEY = 'order';
 
 export const addToCart = (menuItem, modifiers = {}) => {
   return { type: 'ADD_TO_CART', 'menuItem': menuItem, 'selectedModifiers': modifiers};
@@ -10,15 +16,15 @@ export const removeFromCart = cartItem => {
 }
 
 const loadCartItems = () => {
-  return localforage.getItem('cartItems')
+  return localforage.getItem(CART_ITEM_KEY);
 }
 
 const loadCartAddress = () => {
-  return localforage.getItem('cartAddress')
+  return localforage.getItem(CART_ADDRESS_KEY);
 }
 
 const loadUser = () => {
-  return localforage.getItem('user')
+  return localforage.getItem('user');
 }
 
 const loadRestaurant = (client, restaurantId) => {
@@ -26,11 +32,11 @@ const loadRestaurant = (client, restaurantId) => {
 }
 
 const loadDeliveryDate = () => {
-  return localforage.getItem('deliveryDate');
+  return localforage.getItem(DELIVERY_DATE_KEY);
 }
 
 const loadLastOrder = () => {
-  return localforage.getItem('order');
+  return localforage.getItem(ORDER_KEY);
 }
 
 export const initialize = (baseURL, restaurantId) => (dispatch, getState) => {
@@ -48,7 +54,13 @@ export const initialize = (baseURL, restaurantId) => (dispatch, getState) => {
       ])
         .then(values => {
           const [ restaurant, cartItems, cartAddress, user, deliveryDate, order ] = values;
-          dispatch({ type: 'INITIALIZE', client, cartItems, cartAddress, user, restaurant, deliveryDate, order });
+
+          // order already delivered, do not show confirm page, start a new one instead
+          if (deliveryDate && order && moment(deliveryDate).isBefore(Date.now())) {
+            dispatch({ type: 'INITIALIZE', client, user, restaurant});
+          } else {
+            dispatch({ type: 'INITIALIZE', client, cartItems, cartAddress, user, restaurant, deliveryDate, order });
+          }
         });
     });
 }
@@ -172,4 +184,8 @@ export const checkDistance = () => (dispatch, getState) => {
 
 export const setDeliveryDate = (date) => {
   return { type: 'SET_DELIVERY_DATE', date }
+}
+
+export const resetCheckout = () => {
+  return { type: 'RESET_CHECKOUT' }
 }
