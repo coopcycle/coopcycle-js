@@ -1,15 +1,11 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import { withRouter, Redirect } from 'react-router-dom'
-import { Grid, Row, Col, Glyphicon } from 'react-bootstrap';
-import { Menu, MenuSections, Navbar, Breadcrumb, Cart } from '../components'
+import React from 'react';
+import { connect } from 'react-redux';
+import { withRouter, Redirect } from 'react-router-dom';
+import { Grid, Glyphicon } from 'react-bootstrap';
+import { Menu, MenuSections, Navbar, Breadcrumb, Cart } from '../components';
 
 const rowStyle = {
   display: 'flex'
-}
-
-const colStyle = {
-  flex: 1
 }
 
 const MenuPage = ({ cartAddress, openingHours }) => {

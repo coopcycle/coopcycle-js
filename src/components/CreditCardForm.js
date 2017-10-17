@@ -48,8 +48,7 @@ class CreditCardForm extends Component {
 
   render() {
 
-    const { loading, success, error, apiErrorMessage } = this.props.createOrderRequest;
-    // console.log(this.props.createOrderRequest);
+    const { loading, success, apiErrorMessage } = this.props.createOrderRequest;
     let errorMessage = apiErrorMessage || this.state.errorMessage;
 
     if (success) {

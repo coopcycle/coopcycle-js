@@ -1,5 +1,12 @@
 @import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
 
+// variables
+
+$margin-medium: 20px;
+
+
+// bootstrap overrides
+
 body {
   font-family: 'Open Sans', sans-serif;
   padding-top: 40px;
@@ -52,4 +59,17 @@ h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
 .navbar-inverse .navbar-nav > li > a,
 .navbar-inverse .navbar-brand {
   color: #ECF0F1;
+}
+
+// utils
+.margin-bottom-md {
+  margin-bottom: $margin-medium;
+}
+
+.margin-top-md {
+  margin-top: $margin-medium;
+}
+
+.text-center {
+  text-align: center;
 }

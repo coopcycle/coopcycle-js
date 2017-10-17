@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
-import { AddressPicker, Navbar, Breadcrumb } from '../components'
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { AddressPicker, Navbar, Breadcrumb } from '../components';
 
 const AddressPage = ({ history, user }) => {
   return (

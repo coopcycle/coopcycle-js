@@ -16,7 +16,6 @@ class App extends Component {
       initialized: false
     };
 
-
     // wait for initialization to be done to render anything
     let unsubscribe = store.subscribe(() => {
       this.setState({initialized: true});
@@ -44,7 +43,7 @@ class App extends Component {
         <Grid fluid>
           <Row>
             <Col md={8} mdOffset={2}>
-              <Alert bsStyle="warning">Chargement...</Alert>
+              <Alert className="margin-top-md" bsStyle="warning">Chargement...</Alert>
             </Col>
           </Row>
         </Grid>

@@ -1,7 +1,7 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import reducers from './reducers'
-import thunk from 'redux-thunk'
-import localforage from 'localforage'
+import { createStore, applyMiddleware, compose } from 'redux';
+import reducers from './reducers';
+import thunk from 'redux-thunk';
+import localforage from 'localforage';
 
 const middlewares = [ thunk ]
 
@@ -18,6 +18,7 @@ const store = createStore(
 
 store.subscribe(() => {
   const state = store.getState();
+  localforage.setItem('order', state.createOrderRequest.order);
   localforage.setItem('cartItems', state.cartItems);
   localforage.setItem('cartAddress', state.cartAddress);
   localforage.setItem('credentials', state.credentials);

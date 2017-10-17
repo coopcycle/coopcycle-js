@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux'
-import { withRouter, Redirect } from 'react-router-dom'
-import { Navbar, Nav, NavItem, Breadcrumb } from 'react-bootstrap';
-import _ from 'lodash'
-import moment from 'moment'
-import { setDeliveryDate } from '../actions'
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import _ from 'lodash';
+import moment from 'moment';
+import { setDeliveryDate } from '../actions';
 
 moment.locale('fr')
 

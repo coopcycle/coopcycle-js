@@ -27,8 +27,6 @@ const cartItems = (state = [], action) => {
       return newState;
     case 'REMOVE_FROM_CART':
       return _.filter(state, (item) => item !== action.cartItem);
-    case 'CREATE_ORDER_SUCCESS':
-      return []
     default:
       return state
   }
@@ -140,11 +138,16 @@ const createOrderRequest = (state = asyncRequest, action) => {
     case 'CREATE_ORDER_SUCCESS':
     case 'CREATE_ORDER_FAILURE':
       return {
+        order: action.order,
         loading: false,
         success: action.type === 'CREATE_ORDER_SUCCESS',
         error: action.type === 'CREATE_ORDER_FAILURE',
         apiErrorMessage: action.errorMessage
       };
+    case 'INITIALIZE':
+      return {
+        order: action.order
+      }
     default:
       return state
   }

@@ -22,11 +22,15 @@ const loadUser = () => {
 }
 
 const loadRestaurant = (client, restaurantId) => {
-  return client.get('/api/restaurants/' + restaurantId)
+  return client.get('/api/restaurants/' + restaurantId);
 }
 
 const loadDeliveryDate = () => {
-  return localforage.getItem('deliveryDate')
+  return localforage.getItem('deliveryDate');
+}
+
+const loadLastOrder = () => {
+  return localforage.getItem('order');
 }
 
 export const initialize = (baseURL, restaurantId) => (dispatch, getState) => {
@@ -34,12 +38,19 @@ export const initialize = (baseURL, restaurantId) => (dispatch, getState) => {
     .then(credentials => {
       const client = new Client(baseURL, credentials)
 
-      Promise.all([ loadRestaurant(client, restaurantId), loadCartItems(), loadCartAddress(), loadUser(), loadDeliveryDate() ])
+      Promise.all([
+          loadRestaurant(client, restaurantId),
+          loadCartItems(),
+          loadCartAddress(),
+          loadUser(),
+          loadDeliveryDate(),
+          loadLastOrder()
+      ])
         .then(values => {
-          const [ restaurant, cartItems, cartAddress, user, deliveryDate ] = values;
-          dispatch({ type: 'INITIALIZE', client, cartItems, cartAddress, user, restaurant, deliveryDate });
-        })
-    })
+          const [ restaurant, cartItems, cartAddress, user, deliveryDate, order ] = values;
+          dispatch({ type: 'INITIALIZE', client, cartItems, cartAddress, user, restaurant, deliveryDate, order });
+        });
+    });
 }
 
 const authenticationSuccess = (dispatch, getState, credentials) => {

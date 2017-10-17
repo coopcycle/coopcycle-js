@@ -55,8 +55,9 @@ class Cart extends Component {
 
     return (
       <Panel className="cart" header={title}>
-        <DatePicker />
-        <hr />
+        {
+          !this.props.noDatePicker && (<div><DatePicker /><hr/></div>)
+        }
         { this.props.cartItems.length > 0 ? this.renderCartItems(): (
           <Alert bsStyle="warning">Votre panier est vide</Alert>
         ) }
