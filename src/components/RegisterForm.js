@@ -41,8 +41,23 @@ class RegisterForm extends Component {
       <Panel>
         <form onSubmit={this.submitForm.bind(this)}>
           <FormGroup>
+            <ControlLabel>First Name</ControlLabel>
+            <FormControl name="firstName" type="firstName" placeholder="Karl"
+              onChange={ this.handleChange.bind(this) }  />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Last Name</ControlLabel>
+            <FormControl name="familyName" type="familyName" placeholder="Marx"
+              onChange={ this.handleChange.bind(this) }  />
+          </FormGroup>
+          <FormGroup>
             <ControlLabel>Email</ControlLabel>
             <FormControl name="email" type="email" placeholder="test@coopcycle.org"
+              onChange={ this.handleChange.bind(this) }  />
+          </FormGroup>
+          <FormGroup>
+            <ControlLabel>Phone Number</ControlLabel>
+            <FormControl name="phoneNumber" type="phoneNumber" placeholder="+33699887766"
               onChange={ this.handleChange.bind(this) }  />
           </FormGroup>
           <FormGroup>
