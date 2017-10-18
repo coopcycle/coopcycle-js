@@ -29,12 +29,12 @@ class DatePicker extends Component {
   onChangeDate(event, days) {
     const { time } = this.state;
     this.setState({ 'availableTimes': days[event.target.value].map(date => moment(date).format('HH:mm'))});
-    this.props.actions.setDeliveryDate(event.target.value + ' ' + time + ':00')
+    this.props.setDeliveryDate(event.target.value + ' ' + time + ':00')
   }
 
   onChangeTime(event) {
     const { date } = this.state;
-    this.props.actions.setDeliveryDate(date + ' ' + event.target.value + ':00')
+    this.props.setDeliveryDate(date + ' ' + event.target.value + ':00')
   }
 
   handleSetDateAndTime (props) {
@@ -51,7 +51,7 @@ class DatePicker extends Component {
   }
 
   componentWillMount () {
-    this.props.actions.setDeliveryDate(this.props.date + ' ' + this.props.time + ':00')
+    this.props.setDeliveryDate(this.props.date + ' ' + this.props.time + ':00')
     this.handleSetDateAndTime(this.props)
   }
 
@@ -90,17 +90,8 @@ class DatePicker extends Component {
   }
 }
 
-function mapStateToProps(state, props) {
-  return {
-    availabilities: state.restaurant.availabilities,
-    deliveryDate: state.deliveryDate
-  }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({ setDeliveryDate }, dispatch)
-  }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DatePicker))
+export default withRouter(connect(
+  ({ deliveryDate, restaurant: { availabilities } }) =>
+    ({ availabilities, deliveryDate }),
+  { setDeliveryDate }
+)(DatePicker))
