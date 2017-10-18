@@ -20,23 +20,47 @@ class DatePicker extends Component {
     const availableTimes = days[_.first(dates)].map(date => moment(date).format('HH:mm'));
 
     this.state = {
-      'availableTimes': availableTimes
+      'availableTimes': availableTimes,
+      date: null,
+      time: null
     };
   }
 
   onChangeDate(event, days) {
-    const { time } = this.props;
+    const { time } = this.state;
     this.setState({ 'availableTimes': days[event.target.value].map(date => moment(date).format('HH:mm'))});
     this.props.actions.setDeliveryDate(event.target.value + ' ' + time + ':00')
   }
 
   onChangeTime(event) {
-    const { date } = this.props;
+    const { date } = this.state;
     this.props.actions.setDeliveryDate(date + ' ' + event.target.value + ':00')
+  }
+
+  handleSetDateAndTime (props) {
+    let date, time
+    if (!props.deliveryDate) {
+      const first = _.first(props.availabilities)
+      date = moment(first).format('YYYY-MM-DD')
+      time = moment(first).format('HH:mm')
+    } else {
+      date = moment(props.deliveryDate).format('YYYY-MM-DD')
+      time = moment(props.deliveryDate).format('HH:mm')
+    }
+    this.setState({ date, time })
   }
 
   componentWillMount () {
     this.props.actions.setDeliveryDate(this.props.date + ' ' + this.props.time + ':00')
+    this.handleSetDateAndTime(this.props)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    // no need to compute if actually the component updates
+    // for restaurant.availabilities changes
+    if (nextProps.deliveryDate !== this.props.deliveryDate) {
+      this.handleSetDateAndTime(nextProps)
+    }
   }
 
   render() {
@@ -67,22 +91,10 @@ class DatePicker extends Component {
 }
 
 function mapStateToProps(state, props) {
-
-  let date, time;
-  if (!state.deliveryDate) {
-    const first = _.first(state.restaurant.availabilities);
-    date = moment(first).format('YYYY-MM-DD')
-    time = moment(first).format('HH:mm')
-  } else {
-    date = moment(state.deliveryDate).format('YYYY-MM-DD')
-    time = moment(state.deliveryDate).format('HH:mm')
-  }
-
   return {
     availabilities: state.restaurant.availabilities,
-    date,
-    time,
-  };
+    deliveryDate: state.deliveryDate
+  }
 }
 
 function mapDispatchToProps(dispatch) {
