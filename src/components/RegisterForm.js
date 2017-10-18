@@ -1,14 +1,23 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router-dom';
-import { Alert, Panel, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
-import { register } from '../actions';
+import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { Redirect, withRouter } from 'react-router-dom'
+import { compose } from 'redux'
+import { Alert,
+  Button,
+  ControlLabel,
+  FormControl,
+  FormGroup,
+  Panel
+} from 'react-bootstrap'
+
+import { register } from '../actions'
 
 class RegisterForm extends Component {
 
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
+
     this.state = {
       firstName: '',
       familyName: '',
@@ -16,21 +25,26 @@ class RegisterForm extends Component {
       username: '',
       password: '',
       phoneNumber: ''
-    };
+    }
+
+    this.handleChange = this._handleChange.bind(this)
+    this.submitForm = this._submitForm.bind(this)
+
   }
 
-  submitForm(e) {
+  _handleChange(event) {
+    this.setState({ [ event.target.name ]: event.target.value })
+  }
+  _submitForm(e) {
     e.preventDefault()
-    this.props.actions.register(this.state)
-  }
-
-  handleChange(event) {
-    this.setState({ [ event.target.name ]: event.target.value });
+    this.props.register(this.state)
   }
 
   render() {
 
-    const { loading, success, error } = this.props.authenticationRequest;
+    const { authenticationRequest: { loading, success, error },
+      history
+    } = this.props
     const props = loading ? { disabled: true } : {}
 
     if (success) {
@@ -41,36 +55,36 @@ class RegisterForm extends Component {
 
     return (
       <Panel>
-        <form onSubmit={this.submitForm.bind(this)}>
+        <form onSubmit={ this.submitForm }>
           <FormGroup>
             <ControlLabel>First Name</ControlLabel>
             <FormControl name="firstName" type="firstName" placeholder="Karl"
-              onChange={ this.handleChange.bind(this) }  />
+              onChange={ this.handleChange }  />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Last Name</ControlLabel>
             <FormControl name="familyName" type="familyName" placeholder="Marx"
-              onChange={ this.handleChange.bind(this) }  />
+              onChange={ this.handleChange }  />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Email</ControlLabel>
             <FormControl name="email" type="email" placeholder="test@coopcycle.org"
-              onChange={ this.handleChange.bind(this) }  />
+              onChange={ this.handleChange }  />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Phone Number</ControlLabel>
             <FormControl name="phoneNumber" type="phoneNumber" placeholder="+33699887766"
-              onChange={ this.handleChange.bind(this) }  />
+              onChange={ this.handleChange }  />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Nom d'utilisateur</ControlLabel>
             <FormControl name="username" type="text" placeholder="test"
-              onChange={ this.handleChange.bind(this) }  />
+              onChange={ this.handleChange }  />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Mot de passe</ControlLabel>
             <FormControl name="password" type="password"
-              onChange={ this.handleChange.bind(this) } />
+              onChange={ this.handleChange } />
           </FormGroup>
           <FormGroup>
             <Button { ...props } bsStyle="primary" bsSize="large" type="submit" block>
@@ -79,24 +93,20 @@ class RegisterForm extends Component {
           </FormGroup>
           { error ? <Alert bsStyle="danger">Unable to log in</Alert> : ''}
           <hr />
-          <p className="text-center">Déjà enregistré ? <a href="#"
-            onClick={ (e) => { e.preventDefault(); this.props.history.push('/login') } }>Connectez-vous.</a></p>
+          <p className="text-center">
+            Déjà enregistré ? <a href="#"
+              onClick={ (e) => { e.preventDefault(); history.push('/login') } } >
+              Connectez-vous.
+            </a>
+          </p>
         </form>
       </Panel>
     )
   }
 }
 
-function mapStateToProps(state, props) {
-  return {
-    authenticationRequest: state.authenticationRequest
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({ register }, dispatch)
-  }
-}
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RegisterForm))
+export default compose(
+  withRouter,
+  connect(({ authenticationRequest }) => ({ authenticationRequest }),
+  { register })
+)(RegisterForm)
