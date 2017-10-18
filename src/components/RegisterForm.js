@@ -10,16 +10,18 @@ class RegisterForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      firstName: '',
+      familyName: '',
       email: '',
       username: '',
-      password: ''
+      password: '',
+      phoneNumber: ''
     };
   }
 
   submitForm(e) {
-    e.preventDefault();
-    const { email, username, password } = this.state;
-    this.props.actions.register(email, username, password);
+    e.preventDefault()
+    this.props.actions.register(this.state)
   }
 
   handleChange(event) {

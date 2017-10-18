@@ -70,7 +70,7 @@ const authenticationSuccess = (dispatch, getState, credentials) => {
     .then(user => dispatch({ type: 'AUTHENTICATION_SUCCESS', user, credentials }))
 }
 
-export const authenticate = (username, password) => (dispatch, getState) => {
+export const authenticate = (username, password, extraFields) => (dispatch, getState) => {
   dispatch({ type: 'AUTHENTICATION_REQUEST' });
   getState().client
     .login(username, password)
