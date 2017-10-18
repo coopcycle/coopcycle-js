@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
+import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 import { Navbar, Nav, NavItem, Breadcrumb } from 'react-bootstrap';
@@ -90,8 +90,9 @@ class DatePicker extends Component {
   }
 }
 
-export default withRouter(connect(
-  ({ deliveryDate, restaurant: { availabilities } }) =>
+export default compose(
+  withRouter,
+  connect(({ deliveryDate, restaurant: { availabilities } }) =>
     ({ availabilities, deliveryDate }),
-  { setDeliveryDate }
-)(DatePicker))
+  { setDeliveryDate })
+)(DatePicker)
