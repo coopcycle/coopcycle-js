@@ -29,18 +29,11 @@ class DatePicker extends Component {
     }
   }
 
-  onChangeDate({ target: { value }}, days) {
-    const { time } = this.state
-    this.setState({ availableTimes: days[value].map(date =>
-      moment(date).format('HH:mm'))})
-    this.props.setDeliveryDate(value + ' ' + time + ':00')
-  }
-
-  onChangeTime({ target: { value }}) {
-    const { date } = this.state
-    this.props.setDeliveryDate(date + ' ' + value + ':00')
-  }
-
+  // 1. when shouldComponentUpdate said that ok,
+  // the Component has to refresh given the new redux state
+  // we can do the computation at WillMount and WillReceiveProps time
+  // 2. we keep in the local
+  // state of the component these computed date and time variables
   handleSetDateAndTime ({ availabilities, deliveryDate }) {
     let date, time
     if (!deliveryDate) {
@@ -55,18 +48,51 @@ class DatePicker extends Component {
     }
     this.setState({ date, time })
   }
-
   componentWillMount () {
-    this.props.setDeliveryDate(this.props.date + ' ' + this.props.time + ':00')
     this.handleSetDateAndTime(this.props)
   }
-
   componentWillReceiveProps (nextProps) {
     // no need to compute if actually the component updates
     // for restaurant.availabilities changes
     if (nextProps.deliveryDate !== this.props.deliveryDate) {
       this.handleSetDateAndTime(nextProps)
     }
+  }
+
+  // 1. The Component still needs to trigger itself a new action
+  // given its new local state, which is possible to control
+  // at DidMount and DidUpdate time
+  // 2. So once date and time are stored in the local state
+  // we trigger the redux action setDeliveryDate, but we make sure
+  // to call it once
+  handleSetDeliveryDate () {
+    const { date, time } = this.state
+    this.props.setDeliveryDate(date + ' ' + time + ':00')
+  }
+  componentDidMount () {
+    this.handleSetDeliveryDate()
+  }
+  componentDidUpdate (nextState) {
+    // only trigger the action once
+    // when date and/or time have changed in the local state
+    if (nextState.date !== this.state.date || nextState.time !== this.state.time) {
+      this.handleSetDeliveryDate()
+    }
+  }
+
+  // 1. ui state changes that can also trigger
+  // the local state
+  // 2. our hooking setup will trigger automatically
+  // the redux action setDeliveryDate
+  onChangeDate ({ target: { value }}, days) {
+    this.setState({
+      availableTimes: days[value].map(date =>
+        moment(date).format('HH:mm')),
+      date: value
+    })
+  }
+  onChangeTime ({ target: { value }}) {
+    this.setState({ time: value })
   }
 
   render() {
@@ -113,6 +139,18 @@ class DatePicker extends Component {
 
 export default compose(
   withRouter,
+
+  // 1. mapStateToProps is called for anykind of triggered actions.
+  // so doing moment computations in the mapStateToProps time
+  // is a cost but not useful, if actually the last action
+  // was dealing with completely something else related to DatePicker
+
+  // 2. keeping this idea, it is always better in mapStateToProps to return
+  // values that are directly variables we can shallowCompare
+  // if they differ from the previous redux state
+
+  // 3. In that manner, the component shouldUpdates/renders just only
+  // for the values of the redux state that concerns this Component
   connect(({ deliveryDate, restaurant: { availabilities } }) =>
     ({ availabilities, deliveryDate }),
   { setDeliveryDate })

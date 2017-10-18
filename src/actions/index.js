@@ -159,7 +159,6 @@ export const checkDistance = () => (dispatch, getState) => {
     .catch(e => dispatch({ type: 'CHECK_DISTANCE_FAILURE' }))
 }
 
-export const setDeliveryDate = (date) => {
-  console.log(date)
+export const setDeliveryDate = date => {
   return { type: 'SET_DELIVERY_DATE', date }
 }
