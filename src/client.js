@@ -27,17 +27,16 @@ var doLogin = function(baseURL, username, password) {
   });
 };
 
-var doRegister = function(baseURL, email, username, password) {
-
-  var formData  = new FormData();
-  formData.append("_email", email);
-  formData.append("_username", username);
-  formData.append("_password", password);
+var doRegister = function (baseURL, form) {
+  var formData  = new FormData()
+  Object.keys(form)
+    .forEach(key => {
+      formData.append(`_${key}`, form[key])
+    })
   var request = new Request(baseURL + '/api/register', {
     method: 'POST',
     body: formData
-  });
-
+  })
   return new Promise((resolve, reject) => {
     fetch(request)
       .then(function(res) {
@@ -48,10 +47,10 @@ var doRegister = function(baseURL, email, username, password) {
         return res.json().then((json) => reject(json.message));
       })
       .catch((err) => {
-        reject(err);
-      });
-  });
-};
+        reject(err)
+      })
+  })
+}
 
 var refreshToken = function(baseURL, refreshToken) {
   var formData  = new FormData();
@@ -249,20 +248,20 @@ export default class Client {
       })
   }
 
-  register(email, username, password) {
-    return doRegister(this.httpBaseURL, email, username, password)
-      .then((credentials) => {
+  register (form) {
+    return doRegister(this.httpBaseURL, form)
+      .then(credentials => {
 
-        this.credentials = credentials;
+        this.credentials = credentials
 
         try {
           // FIXME This is async
-          localforage.setItem('coopcyle__api_credentials', credentials);
+          localforage.setItem('coopcyle__api_credentials', credentials)
         } catch (e) {
-          console.log(e);
+          console.log(e)
         }
 
-        return credentials;
+        return credentials
       })
   }
 
