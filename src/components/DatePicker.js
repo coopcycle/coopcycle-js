@@ -44,11 +44,13 @@ class DatePicker extends Component {
     let date, time
     if (!props.deliveryDate) {
       const first = _.first(props.availabilities)
-      date = moment(first).format('YYYY-MM-DD')
-      time = moment(first).format('HH:mm')
+      const firstMoment = moment(first)
+      date = firstMoment.format('YYYY-MM-DD')
+      time = firstMoment.format('HH:mm')
     } else {
-      date = moment(props.deliveryDate).format('YYYY-MM-DD')
-      time = moment(props.deliveryDate).format('HH:mm')
+      const deliveryDateMoment = moment(props.deliveryDate)
+      date = deliveryDateMoment.format('YYYY-MM-DD')
+      time = deliveryDateMoment.format('HH:mm')
     }
     this.setState({ date, time })
   }
