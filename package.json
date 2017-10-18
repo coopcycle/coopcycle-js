@@ -28,6 +28,7 @@
     "isomorphic-fetch": "^2.2.1",
     "localforage": "^1.5.0",
     "lodash": "^4.17.4",
+    "lodash.groupby": "^4.6.0",
     "react-scroll": "^1.5.4",
     "object-hash": "^1.1.8"
   },

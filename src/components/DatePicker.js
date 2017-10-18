@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 import { Navbar, Nav, NavItem, Breadcrumb } from 'react-bootstrap'
-import _ from 'lodash'
+import { compose } from 'redux'
+import groupBy from 'lodash.groupby'
 import moment from 'moment'
+
 import { setDeliveryDate } from '../actions'
 
 moment.locale('fr')
@@ -15,11 +16,11 @@ class DatePicker extends Component {
     super(props)
 
     const { availabilities } = this.props
-    const days = _.groupBy(availabilities, date =>
+
+    const days = groupBy(availabilities, date =>
       moment(date).format('YYYY-MM-DD'))
-    const dates = _.keys(days)
-    const availableTimes = days[_.first(dates)].map(date =>
-      moment(date).format('HH:mm'))
+    const availableTimes = days[Object.keys(days)[0]]
+      .map(date => moment(date).format('HH:mm'))
 
     this.state = {
       availableTimes,
@@ -40,15 +41,15 @@ class DatePicker extends Component {
     this.props.setDeliveryDate(date + ' ' + value + ':00')
   }
 
-  handleSetDateAndTime (props) {
+  handleSetDateAndTime ({ availabilities, deliveryDate }) {
     let date, time
-    if (!props.deliveryDate) {
-      const first = _.first(props.availabilities)
+    if (!deliveryDate) {
+      const first = availabilities[0]
       const firstMoment = moment(first)
       date = firstMoment.format('YYYY-MM-DD')
       time = firstMoment.format('HH:mm')
     } else {
-      const deliveryDateMoment = moment(props.deliveryDate)
+      const deliveryDateMoment = moment(deliveryDate)
       date = deliveryDateMoment.format('YYYY-MM-DD')
       time = deliveryDateMoment.format('HH:mm')
     }
