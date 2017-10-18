@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
-import { Navbar, Nav, NavItem, Breadcrumb } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Breadcrumb } from 'react-bootstrap'
 import _ from 'lodash'
 import moment from 'moment'
 import { setDeliveryDate } from '../actions'
@@ -12,28 +12,28 @@ moment.locale('fr')
 class DatePicker extends Component {
 
   constructor (props) {
-    super(props);
+    super(props)
 
-    const { availabilities } = this.props;
-    const days = _.groupBy(availabilities, date => moment(date).format('YYYY-MM-DD'));
-    const dates = _.keys(days);
-    const availableTimes = days[_.first(dates)].map(date => moment(date).format('HH:mm'));
+    const { availabilities } = this.props
+    const days = _.groupBy(availabilities, date => moment(date).format('YYYY-MM-DD'))
+    const dates = _.keys(days)
+    const availableTimes = days[_.first(dates)].map(date => moment(date).format('HH:mm'))
 
     this.state = {
       'availableTimes': availableTimes,
       date: null,
       time: null
-    };
+    }
   }
 
   onChangeDate(event, days) {
-    const { time } = this.state;
-    this.setState({ 'availableTimes': days[event.target.value].map(date => moment(date).format('HH:mm'))});
+    const { time } = this.state
+    this.setState({ 'availableTimes': days[event.target.value].map(date => moment(date).format('HH:mm'))})
     this.props.setDeliveryDate(event.target.value + ' ' + time + ':00')
   }
 
   onChangeTime(event) {
-    const { date } = this.state;
+    const { date } = this.state
     this.props.setDeliveryDate(date + ' ' + event.target.value + ':00')
   }
 
@@ -65,9 +65,9 @@ class DatePicker extends Component {
 
   render() {
 
-    const { availabilities } = this.props;
-    const days = _.groupBy(availabilities, date => moment(date).format('YYYY-MM-DD'));
-    const dates = _.keys(days);
+    const { availabilities } = this.props
+    const days = _.groupBy(availabilities, date => moment(date).format('YYYY-MM-DD'))
+    const dates = _.keys(days)
 
     return (
       <div className="row">
