@@ -15,26 +15,29 @@ class DatePicker extends Component {
     super(props)
 
     const { availabilities } = this.props
-    const days = _.groupBy(availabilities, date => moment(date).format('YYYY-MM-DD'))
+    const days = _.groupBy(availabilities, date =>
+      moment(date).format('YYYY-MM-DD'))
     const dates = _.keys(days)
-    const availableTimes = days[_.first(dates)].map(date => moment(date).format('HH:mm'))
+    const availableTimes = days[_.first(dates)].map(date =>
+      moment(date).format('HH:mm'))
 
     this.state = {
-      'availableTimes': availableTimes,
+      availableTimes,
       date: null,
       time: null
     }
   }
 
-  onChangeDate(event, days) {
+  onChangeDate({ target: { value }}, days) {
     const { time } = this.state
-    this.setState({ 'availableTimes': days[event.target.value].map(date => moment(date).format('HH:mm'))})
-    this.props.setDeliveryDate(event.target.value + ' ' + time + ':00')
+    this.setState({ availableTimes: days[value].map(date =>
+      moment(date).format('HH:mm'))})
+    this.props.setDeliveryDate(value + ' ' + time + ':00')
   }
 
-  onChangeTime(event) {
+  onChangeTime({ target: { value }}) {
     const { date } = this.state
-    this.props.setDeliveryDate(date + ' ' + event.target.value + ':00')
+    this.props.setDeliveryDate(date + ' ' + value + ':00')
   }
 
   handleSetDateAndTime (props) {
@@ -65,24 +68,39 @@ class DatePicker extends Component {
 
   render() {
 
-    const { availabilities } = this.props
-    const days = _.groupBy(availabilities, date => moment(date).format('YYYY-MM-DD'))
+    const { availabilities, date, time } = this.props
+    const { availableTimes } = this.state
+
+    const days = _.groupBy(availabilities, date =>
+      moment(date).format('YYYY-MM-DD'))
     const dates = _.keys(days)
 
     return (
-      <div className="row">
-        <div className="col-sm-6">
-          <select value={ this.props.date } className="form-control" onChange={ (evt) => this.onChangeDate(evt, days) }>
-            { dates.map(date =>
-              <option key={ date } value={ date }>{ moment(date).format('dddd DD MMM') }</option>
-            ) }
+      <div className="row" >
+        <div className="col-sm-6" >
+          <select value={ date }
+            className="form-control"
+            onChange={ evt => this.onChangeDate(evt, days) } >
+            {
+              dates.map(date => (
+                <option key={ date } value={ date } >
+                  { moment(date).format('dddd DD MMM') }
+                </option>
+              ))
+            }
           </select>
         </div>
-        <div className="col-sm-6">
-          <select value={ this.props.time } className="form-control" onChange={ (evt) => this.onChangeTime(evt) }>
-            { this.state.availableTimes.map(time =>
-              <option key={ time }>{ time }</option>
-            ) }
+        <div className="col-sm-6" >
+          <select value={ time }
+            className="form-control"
+            onChange={ evt => this.onChangeTime(evt) } >
+            {
+              availableTimes.map(time => (
+                <option key={ time } >
+                  { time }
+                </option>
+              ))
+            }
           </select>
         </div>
       </div>
