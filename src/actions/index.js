@@ -96,6 +96,10 @@ export const pickAddress = (address) => {
   return { type: 'PICK_ADDRESS', address };
 }
 
+export const completeAddress = address => {
+  return { type: 'COMPLETE_ADDRESS', address }
+}
+
 export const toggleAddressForm = () => {
   return { type: 'TOGGLE_ADDRESS_FORM' };
 }
