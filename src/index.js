@@ -2,7 +2,7 @@ require('./styles/index.scss')
 import React from 'react';
 import { render } from 'react-dom';
 import Modal from 'react-modal';
-import App from './app';
+import Root from './app';
 import Client from './client';
 
 import 'react-hot-loader/patch';
@@ -27,7 +27,7 @@ const renderApp = (el, isOpen, baseURL, restaurantId, stripePublishableKey) => {
   render(
     <AppContainer>
       <Modal isOpen={ isOpen } contentLabel="Commander" style={ modalStyle }>
-        <App
+        <Root
           baseURL={ baseURL }
           restaurantId={ restaurantId }
           stripePublishableKey={ stripePublishableKey }
@@ -39,10 +39,10 @@ const renderApp = (el, isOpen, baseURL, restaurantId, stripePublishableKey) => {
 
   if (module.hot) {
     module.hot.accept('./app.js', () => {
-      const NextApp = require('./app.js').default;
+      const NextRoot = require('./app.js').default;
       render(
         <Modal isOpen={isOpen} contentLabel="Commander" style={modalStyle}>
-          <NextApp
+          <NextRoot
             baseURL={baseURL}
             restaurantId={restaurantId}
             stripePublishableKey={stripePublishableKey}

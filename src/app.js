@@ -7,7 +7,7 @@ import { HashRouter as Router, Route, Redirect } from 'react-router-dom';
 import { initialize } from './actions';
 import store from './store';
 
-class App extends Component {
+class Root extends Component {
 
   constructor(props) {
     super(props);
@@ -69,4 +69,4 @@ class App extends Component {
   }
 }
 
-export default App
+export default Root
