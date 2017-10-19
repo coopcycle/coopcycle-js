@@ -23,12 +23,15 @@ class ConfirmPage extends Component {
       return (<Redirect to={{ pathname: '/' }} />);
     }
 
-    const deliveryTime = moment(this.props.deliveryDate).format('HH[h]mm');
-    const deliveryDate = moment(this.props.deliveryDate).format('dddd DD MMMM');
-    const deliveryIsToday = moment(this.props.deliveryDate).isSame(Date.now());
+    const { client: { httpBaseURL }, deliveryDate, order: { publicUrl } } = this.props
+    const deliveryMoment = moment(deliveryDate)
+    const deliveryTime = deliveryMoment.format('HH[h]mm')
+    const deliveryDate = deliveryMoment.format('dddd DD MMMM')
+    const deliveryIsToday = deliveryDate === moment(Date.now()).format('dddd DD MMMM')
+
     let deliveryDateText = !deliveryIsToday ? ' le ' + deliveryDate : '';
 
-    const orderUrl = this.props.client.httpBaseURL + this.props.order.publicUrl;
+    const orderUrl = httpBaseURL + publicUrl;
 
     return (
       <Grid fluid>
