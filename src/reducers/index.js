@@ -26,7 +26,7 @@ const cartItems = (state = [], action) => {
       }
       return newState;
     case 'REMOVE_FROM_CART':
-      return _.filter(state, (item) => item !== action.cartItem);
+      return state.filter((item) => item !== action.cartItem);
     case 'RESET_CHECKOUT':
       return [];
     default:
