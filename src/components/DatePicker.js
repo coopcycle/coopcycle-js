@@ -101,8 +101,8 @@ class DatePicker extends Component {
 
   render() {
 
-    const { availabilities, date, time } = this.props
-    const { availableTimes } = this.state
+    const { availabilities } = this.props
+    const { availableTimes, date, time } = this.state
 
     const days = _.groupBy(availabilities, date =>
       moment(date).format('YYYY-MM-DD'))

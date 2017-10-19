@@ -26,10 +26,10 @@ class ConfirmPage extends Component {
     const { client: { httpBaseURL }, deliveryDate, order: { publicUrl } } = this.props
     const deliveryMoment = moment(deliveryDate)
     const deliveryTime = deliveryMoment.format('HH[h]mm')
-    const deliveryDate = deliveryMoment.format('dddd DD MMMM')
-    const deliveryIsToday = deliveryDate === moment(Date.now()).format('dddd DD MMMM')
+    const formattedDeliveryDate = deliveryMoment.format('dddd DD MMMM')
+    const deliveryIsToday = formattedDeliveryDate === moment(Date.now()).format('dddd DD MMMM')
 
-    let deliveryDateText = !deliveryIsToday ? ' le ' + deliveryDate : '';
+    let deliveryDateText = !deliveryIsToday ? ' le ' + formattedDeliveryDate : '';
 
     const orderUrl = httpBaseURL + publicUrl;
 
