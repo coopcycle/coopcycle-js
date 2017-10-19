@@ -7,8 +7,8 @@ export const CART_ADDRESS_KEY = 'cartAddress';
 export const DELIVERY_DATE_KEY = 'deliveryDate';
 export const ORDER_KEY = 'order';
 
-export const addToCart = (menuItem, modifiers = {}) => {
-  return { type: 'ADD_TO_CART', 'menuItem': menuItem, 'selectedModifiers': modifiers};
+export const addToCart = (menuItem, selectedModifiers = {}) => {
+  return { type: 'ADD_TO_CART', menuItem, selectedModifiers};
 }
 
 export const removeFromCart = cartItem => {
