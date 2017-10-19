@@ -167,9 +167,7 @@ export const finalizeOrder = (stripeToken) => (dispatch, getState) => {
   // TODO Error control
 }
 
-export const closeModal = () => {
-  return { type: 'CLOSE_MODAL' }
-}
+export const closeModal = () => ({ type: 'CLOSE_MODAL' })
 
 export const checkDistance = () => (dispatch, getState) => {
 
@@ -182,10 +180,8 @@ export const checkDistance = () => (dispatch, getState) => {
     .catch(e => dispatch({ type: 'CHECK_DISTANCE_FAILURE' }))
 }
 
-export const setDeliveryDate = (date) => {
-  return { type: 'SET_DELIVERY_DATE', date }
-}
 
-export const resetCheckout = () => {
-  return { type: 'RESET_CHECKOUT' }
-}
+export const setDeliveryDate = (date) => ({ type: 'SET_DELIVERY_DATE', date })
+
+export const resetCheckout = () => ({ type: 'RESET_CHECKOUT' })
+
