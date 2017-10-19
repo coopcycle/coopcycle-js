@@ -53,7 +53,7 @@ class ConfirmPage extends Component {
         </Row>
         <Row className="margin-top-md">
           <Col md={8} mdOffset={2}>
-            <Cart readonly="true" noDatePicker="true" />
+            <Cart readonly noDatePicker />
           </Col>
         </Row>
       </Grid>
