@@ -117,7 +117,7 @@ class DatePicker extends Component {
             {
               dates.map(date => (
                 <option key={ date } value={ date } >
-                  { moment(date).format('dddd DD MMM') }
+                  { moment(date).calendar(null, { sameDay: '[Aujourd\'hui]',  nextDay: '[Demain]', nextWeek: 'dddd DD MMM'}) }
                 </option>
               ))
             }
