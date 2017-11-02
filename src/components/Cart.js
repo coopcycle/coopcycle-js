@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { Panel, ListGroup, ListGroupItem, Alert, Button } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Alert, Button } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import _ from 'lodash';
 import { withRouter } from 'react-router-dom'
 import { removeFromCart } from '../actions'
-import { cartTotal } from '../utils'
+import { cartTotal, cartCountItems } from '../utils'
 import DatePicker from './DatePicker'
 
 class Cart extends Component {
@@ -73,7 +73,7 @@ class Cart extends Component {
     return (
       <div className={ panelClasses.join(' ') }>
         <div className="panel-heading cart-heading" onClick={ this.onHeaderClick }>
-          <span className="cart-heading--items">2</span>
+          <span className="cart-heading--items">{ this.props.itemCount }</span>
           <span className="cart-heading--total"><i className={ toggled ? "glyphicon glyphicon-chevron-up" : "glyphicon glyphicon-chevron-down"}></i></span>
           Ma commande
         </div>
@@ -99,6 +99,7 @@ function mapStateToProps(state, props) {
   return {
     cartItems: state.cartItems,
     total: cartTotal(state.cartItems),
+    itemCount: cartCountItems(state.cartItems),
     isAuthenticated: !!state.user
   };
 }
