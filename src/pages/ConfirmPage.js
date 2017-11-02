@@ -51,7 +51,7 @@ class ConfirmPage extends Component {
             <Button onClick={ () => this.onClick() } bsStyle="primary" bsSize="large">Nouvelle commande</Button>
           </Col>
         </Row>
-        <Row className="margin-top-md">
+        <Row className="margin-top-md hidden-md">
           <Col md={8} mdOffset={2}>
             <Cart readonly noDatePicker />
           </Col>

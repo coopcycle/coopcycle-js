@@ -10,7 +10,22 @@ import DatePicker from './DatePicker'
 
 class Cart extends Component {
 
-  onButtonClick() {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      toggled: false
+    }
+
+    this.onButtonClick = this.onButtonClick.bind(this)
+    this.onHeaderClick = this.onHeaderClick.bind(this)
+  }
+
+  onHeaderClick () {
+    this.setState({'toggled': !this.state.toggled })
+  }
+
+  onButtonClick () {
     this.props.history.push(this.props.isAuthenticated ? '/checkout' : '/login')
   }
 
@@ -43,30 +58,39 @@ class Cart extends Component {
     const buttonDisabled = this.props.cartItems.length === 0;
 
     return (
-      <Button disabled={ buttonDisabled } bsStyle="primary" bsSize="large" block onClick={ this.onButtonClick.bind(this) }>Commander</Button>
+      <Button disabled={ buttonDisabled } bsStyle="primary" bsSize="large" block onClick={ this.onButtonClick }>Commander</Button>
     )
   }
 
   render() {
+    const { toggled } = this.state
 
-    const title = (
-      <h3>Panier</h3>
-    );
+    var panelClasses = ['panel', 'panel-default', 'cart-wrapper']
+    if (toggled) {
+      panelClasses.push('cart-wrapper--show')
+    }
 
     return (
-      <Panel className="cart" header={title}>
-        {
-          !this.props.noDatePicker && (<div><DatePicker /><hr/></div>)
-        }
-        { this.props.cartItems.length > 0 ? this.renderCartItems(): (
-          <Alert bsStyle="warning">Votre panier est vide</Alert>
-        ) }
-        <hr />
-        <p>
-          <strong>Total : { this.props.total } €</strong>
-        </p>
-        { !this.props.readonly && this.renderButton() }
-      </Panel>
+      <div className={ panelClasses.join(' ') }>
+        <div className="panel-heading cart-heading" onClick={ this.onHeaderClick }>
+          <span className="cart-heading--items">2</span>
+          <span className="cart-heading--total"><i className={ toggled ? "glyphicon glyphicon-chevron-up" : "glyphicon glyphicon-chevron-down"}></i></span>
+          Ma commande
+        </div>
+        <div className="panel-body">
+          {
+            !this.props.noDatePicker && (<div><DatePicker /><hr/></div>)
+          }
+          { this.props.cartItems.length > 0 ? this.renderCartItems(): (
+            <Alert bsStyle="warning">Votre panier est vide</Alert>
+          ) }
+          <hr />
+          <p>
+            <strong>Total : { this.props.total } €</strong>
+          </p>
+          { !this.props.readonly && this.renderButton() }
+        </div>
+      </div>
     )
   }
 }

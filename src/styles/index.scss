@@ -3,9 +3,12 @@
 // variables
 
 $margin-medium: 20px;
+$screen-md-min: 768px;
+
+$white: #fff;
 $white-text: #ECF0F1;
 $main-blue: #3C4A59;
-
+$main-blue-light: lighten($main-blue, 30%);
 
 // bootstrap overrides
 
@@ -24,6 +27,14 @@ input[type=radio] {
 
 h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
   font-family: 'Arvo', serif;
+}
+
+.panel {
+  border: none;
+
+  & > .panel-heading {
+    border: none;
+  }
 }
 
 .navbar-inverse {
@@ -61,6 +72,81 @@ h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
 .navbar-inverse .navbar-nav > li > a,
 .navbar-inverse .navbar-brand {
   color: $white-text;
+}
+
+// cart
+
+$cart-heading-height: 40px;
+
+.cart-heading {
+  position: relative;
+  height: $cart-heading-height;
+
+  @media screen and (max-width: $screen-md-min) {
+    height: $cart-heading-height;
+    text-align: center;
+    color: $white !important;
+    background-color: $main-blue-light !important;
+  }
+}
+
+.cart-heading--items {
+  display: none;
+
+  @media screen and (max-width: $screen-md-min) {
+    display: block;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 30px;
+    left: 30px;
+    background-color: $main-blue;
+  }
+}
+
+.cart-heading--total {
+  display: none;
+
+  @media screen and (max-width: $screen-md-min) {
+    display: block;
+    position: absolute;
+    right: 40px;
+    height: 20px;
+    width: 20px;
+    padding: 0 5px;
+    border-radius: 30px;
+    background-color: $main-blue;
+
+    .glyphicon {
+      position: relative;
+      right: 1px;
+    }
+  }
+}
+
+.cart-wrapper {
+  overflow-y: scroll;
+  height: 100%;
+
+  @media screen and (max-width: $screen-md-min) {
+    padding: 0;
+    margin-bottom: 0;
+    cursor: pointer;
+
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    transform: translateY(calc(100% - #{$cart-heading-height}));
+    transition: transform 0.4s;
+  }
+}
+
+.cart-wrapper--show {
+  @media screen and (max-width: $screen-md-min) {
+    transform: translateY(0);
+  }
 }
 
 // utils

@@ -17,9 +17,13 @@ const CheckoutPage = ({ user, cartAddress }) => {
     <Grid fluid>
       <Navbar />
       <Breadcrumb step={4} />
-      <Row>
+      <Row className="hidden-xs hidden-sm">
         <Col md={8} mdOffset={2}>
           <Cart readonly />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={8} mdOffset={2}>
           <Address />
           <Elements>
             <CreditCardForm />
