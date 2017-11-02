@@ -2,7 +2,9 @@
 
 // variables
 
+$margin-small: 10px;
 $margin-medium: 20px;
+
 $screen-md-min: 768px;
 
 $white: #fff;
@@ -65,8 +67,18 @@ h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
   color: $white-text;
 }
 
+.breadcrumb {
+  @media screen and (max-width: $screen-md-min) {
+    margin-bottom: $margin-small;
+  }
+}
+
 // menu
 .list-section-item {
+
+  @media screen and (max-width: $screen-md-min) {
+    display: inline-block;
+  }
 
   &:hover, &:focus {
     text-decoration: none;
@@ -79,7 +91,7 @@ h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
   }
 
   &.active .list-group-item:last-child {
-    margin-bottom: 0;
+    margin-bottom: -1px;
   }
 
 }

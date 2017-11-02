@@ -1,12 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
-import { Grid, Glyphicon } from 'react-bootstrap';
+import { Grid, Glyphicon, Row, Col } from 'react-bootstrap';
 import { Menu, MenuSections, Navbar, Breadcrumb, Cart } from '../components';
-
-const rowStyle = {
-  display: 'flex'
-}
 
 const MenuPage = ({ cartAddress, openingHours }) => {
 
@@ -20,25 +16,27 @@ const MenuPage = ({ cartAddress, openingHours }) => {
     <Grid fluid>
       <Navbar />
       <Breadcrumb step={2} />
-      <div style={ rowStyle }>
-        <div style={{ flex: 1 }}>
-          <h4>Menu</h4>
+      <Row>
+        <Col md={3}>
+          <div className="margin-bottom-md">
+            <h4>Horaires</h4>
+            { openingHours.map((openingHour) =>
+              <div key={ openingHour }>
+                <Glyphicon glyph="time" />
+                <span className="text-muted" style={{ marginLeft: '5px' }}>{ openingHour }</span>
+              </div>
+            ) }
+          </div>
+          <h4 className="hidden-xs hidden-sm">Menu</h4>
           <MenuSections />
-          <h4>Horaires</h4>
-          { openingHours.map((openingHour) =>
-            <div key={ openingHour }>
-              <Glyphicon glyph="time" />
-              <span className="text-muted" style={{ marginLeft: '5px' }}>{ openingHour }</span>
-            </div>
-          ) }
-        </div>
-        <div style={{ flex: 3, padding: '0 15px' }}>
+        </Col>
+        <Col md={6}>
           <Menu />
-        </div>
-        <div style={{ flex: 2 }}>
+        </Col>
+        <Col md={3}>
           <Cart />
-        </div>
-      </div>
+        </Col>
+      </Row>
     </Grid>
   )
 }
