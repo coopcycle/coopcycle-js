@@ -5,16 +5,24 @@ import { connect } from 'react-redux';
 import Scroll  from 'react-scroll';
 import MenuItem from './MenuItem';
 
+const scrollableElementHeight = '600px';
+
 class Menu extends Component {
 
-  renderSection(section) {
+  renderSection(section, index) {
 
     if (section.hasMenuItem.length === 0) {
       return;
     }
 
+    let cssStyle = {}
+
+    if (index === this.props.menu.hasMenuSection.length - 1) {
+      cssStyle['minHeight'] = scrollableElementHeight
+    }
+
     return (
-      <Scroll.Element name={ section.name } key={ section.name }>
+      <Scroll.Element name={ section.name } key={ section.name } style={ cssStyle }>
         <h4>{ section.name }</h4>
         <ListGroup>
         {
@@ -29,8 +37,8 @@ class Menu extends Component {
 
   render() {
     return (
-      <div id="scrollable" style={{ position: 'relative', height: '632px', overflow:'scroll', }}>
-      { _.map(this.props.menu.hasMenuSection, (section) => this.renderSection(section)) }
+      <div id="scrollable" style={{ position: 'relative', height: scrollableElementHeight, overflow:'scroll', }}>
+      { _.map(this.props.menu.hasMenuSection, (section, index) => this.renderSection(section, index)) }
       </div>
     )
   }

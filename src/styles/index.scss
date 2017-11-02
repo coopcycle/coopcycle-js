@@ -65,6 +65,25 @@ h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
   color: $white-text;
 }
 
+// menu
+.list-section-item {
+
+  &:hover, &:focus {
+    text-decoration: none;
+  }
+
+  &.active .list-group-item {
+    background-color: $main-blue-light;
+    color: $white;
+    text-decoration: none;
+  }
+
+  &.active .list-group-item:last-child {
+    margin-bottom: 0;
+  }
+
+}
+
 // cart
 
 $cart-heading-height: 40px;

@@ -9,11 +9,11 @@ class MenuSections extends Component {
     return (
       <ListGroup>
       { _.map(this.props.sections, (section) =>
-        <ListGroupItem key={ section['@id'] }>
-          <Scroll.Link to={ section.name } containerId="scrollable" spy={true} smooth={true} duration={250} href="#">
-            { section.name }
-          </Scroll.Link>
-        </ListGroupItem>
+        <Scroll.Link className="list-section-item" to={ section.name } offset={1} containerId="scrollable" spy={true} smooth={true} duration={250} href="#">
+          <ListGroupItem key={ section['@id'] }>
+              { section.name }
+          </ListGroupItem>
+        </Scroll.Link>
       ) }
       </ListGroup>
     )
