@@ -9,6 +9,8 @@ $white: #fff;
 $white-text: #ECF0F1;
 $main-blue: #3C4A59;
 $main-blue-light: lighten($main-blue, 30%);
+$light-gray: #f5f5f5;
+$gray: #ddd;
 
 // bootstrap overrides
 
@@ -29,14 +31,6 @@ h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
   font-family: 'Arvo', serif;
 }
 
-.panel {
-  border: none;
-
-  & > .panel-heading {
-    border: none;
-  }
-}
-
 .navbar-inverse {
   background-color: $main-blue;
   border-color: $main-blue;
@@ -51,13 +45,10 @@ h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
   height: 23px;
 }
 
-.cart .quantity {
-  margin-left: 5px;
-}
-
 .close {
   color: #fff;
-  text-shadow: none
+  text-shadow: none;
+  opacity: 1;
 }
 
 .coopcycle-brand {
@@ -140,6 +131,24 @@ $cart-heading-height: 40px;
     right: 0;
     transform: translateY(calc(100% - #{$cart-heading-height}));
     transition: transform 0.4s;
+
+    // hide some bootstrap stuff
+    .panel {
+      border: none;
+
+      & > .panel-heading {
+        border: none;
+      }
+    }
+  }
+
+  .close {
+    color: $gray;
+    text-shadow: none
+  }
+
+  .quantity {
+    margin-left: 5px;
   }
 }
 
