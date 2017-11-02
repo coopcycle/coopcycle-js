@@ -3,6 +3,8 @@
 // variables
 
 $margin-medium: 20px;
+$white-text: #ECF0F1;
+$main-blue: #3C4A59;
 
 
 // bootstrap overrides
@@ -25,13 +27,13 @@ h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
 }
 
 .navbar-inverse {
-  background-color: #3C4A59;
-  border-color: #3C4A59;
+  background-color: $main-blue;
+  border-color: $main-blue;
 }
 
 .navbar-inverse .navbar-nav > li > a,
 .navbar-inverse .navbar-brand {
-  color: #ECF0F1;
+  color: $white-text;
 }
 
 .brands img {
@@ -52,13 +54,13 @@ h1, h2, h3, h4, .navbar-brand, .coopcycle-brand {
 }
 
 .navbar-inverse {
-  background-color: #3C4A59;
-  border-color: #3C4A59;
+  background-color: $main-blue;
+  border-color: $main-blue;
 }
 
 .navbar-inverse .navbar-nav > li > a,
 .navbar-inverse .navbar-brand {
-  color: #ECF0F1;
+  color: $white-text;
 }
 
 // utils
