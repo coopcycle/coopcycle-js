@@ -75,12 +75,12 @@ if (typeof window !== 'undefined') {
       scripts.forEach(src => {
         const script = document.createElement('script');
         script.setAttribute('src', src);
-        document.body.append(script);
+        document.body.appendChild(script);
       })
 
       const rootEl = document.createElement('div');
       rootEl.setAttribute('id', 'coopcycle__app');
-      document.body.append(rootEl);
+      document.body.appendChild(rootEl);
 
       let modal = renderApp(rootEl, false, baseURL, restaurantId, stripePublishableKey);
 
