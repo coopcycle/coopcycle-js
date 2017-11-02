@@ -23,7 +23,7 @@ class Breadcrumb_ extends Component {
         <Breadcrumb.Item active={ this.props.step < 2 } onClick={ e => this.onClickItem(2, '/menu') }>
           Panier
         </Breadcrumb.Item>
-        <Breadcrumb.Item active={ this.props.step < 3 }>
+        <Breadcrumb.Item active={ this.props.step < 3 } className="hidden-sm hidden-xs">
           Connexion
         </Breadcrumb.Item>
         <Breadcrumb.Item active={ this.props.step < 4 }>
