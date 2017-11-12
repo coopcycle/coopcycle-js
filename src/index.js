@@ -60,7 +60,7 @@ if (typeof window !== 'undefined') {
 
   if (el) {
 
-    const baseURL = el.getAttribute('data-base-url');
+    const baseURL = el.getAttribute(  'data-base-url');
     const restaurantId = el.getAttribute('data-restaurant-id');
     const stripePublishableKey = el.getAttribute('data-stripe-publishable-key');
     const googleApiKey = el.getAttribute('data-google-api-key');

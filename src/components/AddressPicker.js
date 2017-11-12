@@ -126,7 +126,7 @@ class AddressPicker extends Component {
       placeholder: 'Entrez votre adresse',
       value: streetAddress,
       onChange: (streetAddress) => this.setState({ streetAddress }),
-      autoComplete: false,
+      autoComplete: "false",
     }
 
     const cssClasses = {

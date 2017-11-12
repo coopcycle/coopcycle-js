@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Modal, Button } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { addToCart } from '../actions';
 import _ from 'lodash';
+import Modal from 'react-modal';
 
 
 class MenuItem extends Component {
@@ -26,6 +27,11 @@ class MenuItem extends Component {
     this.setState({showModal: false});
   }
 
+  stopPropagation (evt) {
+    evt.stopPropagation();
+    return false;
+  }
+
   removeModifierChoice (modifier) {
     var state = _.cloneDeep(this.state);
     delete state['selectedModifiers'][modifier['@id']];
@@ -33,7 +39,6 @@ class MenuItem extends Component {
   }
 
   setModifierChoice (modifier, choice) {
-
     var state = _.cloneDeep(this.state);
     state['selectedModifiers'][modifier['@id']] = choice;
     this.setState(state);
@@ -51,7 +56,7 @@ class MenuItem extends Component {
     }
   }
 
-  onModalDone () {
+  onModalDone (e) {
     this.closeModal();
     this.props.onItemClick(this.props.item, this.state.selectedModifiers);
   }
@@ -81,16 +86,18 @@ class MenuItem extends Component {
       <ListGroupItem onClick = { this.props.item.modifiers.length > 0 ? () => this.showModal() : () => this.props.onItemClick(this.props.item) }>
         { this.props.item.name } <span className="pull-right">{ this.props.item.offers.price } €</span>
         { this.props.item.modifiers.length > 0 ?
-          <Modal show={ this.state.showModal } onHide={ () => this.closeModal() }>
-            <Modal.Header closeButton>
-              <h3>{ this.props.item.name }</h3>
-            </Modal.Header>
-            <Modal.Body>
-              { this.props.item.modifiers.map( (modifier, key) => this.renderModifier(modifier, key)) }
-            </Modal.Body>
-            <Modal.Footer>
-              <Button bsStyle="primary" bsSize="large" block onClick={ () => this.onModalDone() }>Ajouter</Button>
-            </Modal.Footer>
+          <Modal isOpen={ this.state.showModal } onHide={ () => this.closeModal() }>
+            <div onClick={ (evt) => this.stopPropagation(evt) }>
+              <div>
+                <h3>{ this.props.item.name }</h3>
+              </div>
+              <div>
+                { this.props.item.modifiers.map( (modifier, key) => this.renderModifier(modifier, key)) }
+              </div>
+              <div>
+                <Button bsStyle="primary" bsSize="large" block onClick={ (evt) => this.onModalDone(evt) }>Ajouter</Button>
+              </div>
+            </div>
           </Modal>
           : ''
         }
