@@ -18,12 +18,12 @@ class RegisterForm extends Component {
     super(props)
 
     this.state = {
-      firstName: '',
-      familyName: '',
+      given_name: '',
+      family_name: '',
       email: '',
       username: '',
       password: '',
-      phoneNumber: ''
+      phone_number: ''
     }
 
     this.handleChange = this._handleChange.bind(this)
@@ -57,12 +57,12 @@ class RegisterForm extends Component {
         <form onSubmit={ this.submitForm }>
           <FormGroup>
             <ControlLabel>First Name</ControlLabel>
-            <FormControl name="firstName" type="firstName" placeholder="Karl"
+            <FormControl name="given_name" type="firstName" placeholder="Karl"
               onChange={ this.handleChange }  />
           </FormGroup>
           <FormGroup>
             <ControlLabel>Last Name</ControlLabel>
-            <FormControl name="familyName" type="familyName" placeholder="Marx"
+            <FormControl name="family_name" type="familyName" placeholder="Marx"
               onChange={ this.handleChange }  />
           </FormGroup>
           <FormGroup>
@@ -72,7 +72,7 @@ class RegisterForm extends Component {
           </FormGroup>
           <FormGroup>
             <ControlLabel>Phone Number</ControlLabel>
-            <FormControl name="phoneNumber" type="phoneNumber" placeholder="+33699887766"
+            <FormControl name="phone_number" type="phoneNumber" placeholder="+33699887766"
               onChange={ this.handleChange }  />
           </FormGroup>
           <FormGroup>
