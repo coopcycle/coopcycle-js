@@ -1,10 +1,10 @@
+import classnames from 'classnames'
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { addToCart } from '../actions';
+import { addToCart, removeLastCartItem } from '../actions';
 import _ from 'lodash';
 import Modal from 'react-modal';
-
 
 class MenuItem extends Component {
 
@@ -82,17 +82,19 @@ class MenuItem extends Component {
   }
 
   render () {
+    const { cartLastItem, item } = this.props
+    const isActive = item['@id'] === (cartLastItem && cartLastItem['@id'])
     return (
-      <ListGroupItem onClick = { this.props.item.modifiers.length > 0 ? () => this.showModal() : () => this.props.onItemClick(this.props.item) }>
-        { this.props.item.name } <span className="pull-right">{ this.props.item.offers.price } €</span>
-        { this.props.item.modifiers.length > 0 ?
+      <ListGroupItem active={isActive} disabled={cartLastItem} onClick = { item.modifiers.length > 0 ? () => this.showModal() : () => !cartLastItem && this.props.onItemClick(item) }>
+        { item.name } <span className="pull-right">{ item.offers.price } €</span>
+        { item.modifiers.length > 0 ?
           <Modal isOpen={ this.state.showModal } onHide={ () => this.closeModal() }>
             <div onClick={ (evt) => this.stopPropagation(evt) }>
               <div>
-                <h3>{ this.props.item.name }</h3>
+                <h3>{ item.name }</h3>
               </div>
               <div>
-                { this.props.item.modifiers.map( (modifier, key) => this.renderModifier(modifier, key)) }
+                { item.modifiers.map( (modifier, key) => this.renderModifier(modifier, key)) }
               </div>
               <div>
                 <Button bsStyle="primary" bsSize="large" block onClick={ (evt) => this.onModalDone(evt) }>Ajouter</Button>
@@ -107,15 +109,16 @@ class MenuItem extends Component {
 
 }
 
-const mapStateToProps = state => {
-  return {
-  }
-}
 
-const mapDispatchToProps = dispatch => {
-  return {
-    onItemClick: (item, modifiers = {}) => { dispatch(addToCart(item, modifiers)) }
-  }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);
+export default connect(
+  ({ cartLastItem }) => ({ cartLastItem }),
+  dispatch => {
+    return {
+      onItemClick: (item, modifiers = {}) => {
+        dispatch(addToCart(item, modifiers))
+        setTimeout(() => dispatch(removeLastCartItem()), 1000)
+      }
+    }
+  }
+)(MenuItem);
