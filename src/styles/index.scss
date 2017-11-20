@@ -201,3 +201,15 @@ $cart-heading-height: 40px;
 .text-center {
   text-align: center;
 }
+
+.list-group-item {
+  transition: all 0.4s ease-out;
+}
+
+.quantity {
+  transition: all 0.4s ease-out;
+  &--last {
+    color: white;
+    transition: all 0.4s ease-out;
+  }
+}
