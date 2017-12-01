@@ -85,8 +85,13 @@ class MenuItem extends Component {
     const { cartLastItem, item } = this.props
     const isActive = item['@id'] === (cartLastItem && cartLastItem['@id'])
     return (
-      <ListGroupItem active={isActive} disabled={cartLastItem} onClick = { item.modifiers.length > 0 ? () => this.showModal() : () => !cartLastItem && this.props.onItemClick(item) }>
-        { item.name } <span className="pull-right">{ item.offers.price } €</span>
+      <ListGroupItem
+        active={isActive}
+      >
+        <span className={classnames("add-icon", { 'add-icon--disabled': cartLastItem })}
+          onClick={ item.modifiers.length > 0
+          ? () => this.showModal()
+          : () => !cartLastItem && this.props.onItemClick(item) }> + </span> { item.name } <span className="pull-right price"> { item.offers.price } €</span>
         { item.modifiers.length > 0 ?
           <Modal isOpen={ this.state.showModal } onHide={ () => this.closeModal() }>
             <div onClick={ (evt) => this.stopPropagation(evt) }>

@@ -202,8 +202,43 @@ $cart-heading-height: 40px;
   text-align: center;
 }
 
+.add-icon {
+  cursor: pointer;
+  border-radius: 50%;
+  border: 1px solid $main-blue-light;
+  color: $main-blue-light;
+  display: inline-block;
+  font-size: 20px;
+  margin-right: 1rem;
+  height: 30px;
+  text-align: center;
+  width: 30px;
+  &:hover {
+    background-color: $main-blue-light;
+    transition: all 0.4s ease-out;
+  }
+  &:focus {
+    border-color: white;
+    color: white;
+  }
+  &--disabled {
+    &:hover {
+      background-color: transparent;
+    }
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.price {
+  line-height: 30px;
+}
+
 .list-group-item {
   transition: all 0.4s ease-out;
+  &.disabled {
+    background-color: transparent;
+  }
 }
 
 .quantity {
