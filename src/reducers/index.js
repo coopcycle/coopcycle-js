@@ -2,6 +2,18 @@ import { combineReducers } from 'redux'
 import _ from 'lodash';
 import hash from 'object-hash';
 
+const cartLastItem = (state = null, action) => {
+  console.log('cdqs', action.type)
+  switch (action.type) {
+    case 'ADD_TO_CART':
+      return action.menuItem
+    case 'REMOVE_LAST_CART_ITEM':
+      return null
+    default:
+      return state
+  }
+}
+
 const cartItems = (state = [], action) => {
 
   let newState, cartItem;
@@ -26,7 +38,7 @@ const cartItems = (state = [], action) => {
       }
       return newState;
     case 'REMOVE_FROM_CART':
-      return state.filter((item) => item !== action.cartItem);
+      return state.filter(item => item !== action.cartItem);
     case 'RESET_CHECKOUT':
       return [];
     default:
@@ -199,7 +211,7 @@ const deliveryDate = (state = null, action) => {
   }
 }
 
-export default combineReducers({
+export default combineReducers({ cartLastItem,
   cartItems,
   cartAddress,
   client,

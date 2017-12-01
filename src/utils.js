@@ -32,5 +32,4 @@ const cartCountItems = cartItems => {
   })
 }
 
-
 export { cartTotal, cartCountItems }

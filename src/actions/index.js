@@ -7,6 +7,10 @@ export const CART_ADDRESS_KEY = 'cartAddress';
 export const DELIVERY_DATE_KEY = 'deliveryDate';
 export const ORDER_KEY = 'order';
 
+export const removeLastCartItem = () => {
+  return { type: 'REMOVE_LAST_CART_ITEM' }
+}
+
 export const addToCart = (menuItem, selectedModifiers = {}) => {
   return { type: 'ADD_TO_CART', menuItem, selectedModifiers};
 }
@@ -184,4 +188,3 @@ export const checkDistance = () => (dispatch, getState) => {
 export const setDeliveryDate = (date) => ({ type: 'SET_DELIVERY_DATE', date })
 
 export const resetCheckout = () => ({ type: 'RESET_CHECKOUT' })
-

@@ -1,3 +1,4 @@
+import classnames from 'classnames'
 import React, { Component } from 'react';
 import { ListGroup, ListGroupItem, Alert, Button } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
@@ -36,12 +37,15 @@ class Cart extends Component {
   }
 
   renderCartItems() {
+    const { cartItems, cartLastItem } = this.props
     return (
       <ListGroup>
-      { this.props.cartItems.map((item, key) =>
-        <ListGroupItem key={ key }>
+      { cartItems.map((item, key) =>
+        <ListGroupItem active={item.menuItem['@id'] === (cartLastItem && cartLastItem['@id'])} key={ key }>
           { item.menuItem.name }
-          <span className="quantity text-muted">×{ item.quantity }</span>
+          <span className={classnames("quantity text-muted", {
+            "quantity--last": item.menuItem['@id'] === (cartLastItem && cartLastItem['@id'])
+          })}>×{ item.quantity }</span>
           <button type="button" className="close pull-right" aria-label="Close"
             onClick={ () => this.props.actions.removeFromCart(item) }>
             <span aria-hidden="true">×</span>
@@ -63,6 +67,12 @@ class Cart extends Component {
   }
 
   render() {
+    const { cartItems,
+      noDatePicker,
+      itemCount,
+      readonly,
+      total
+    } = this.props
     const { toggled } = this.state
 
     var panelClasses = ['panel', 'panel-default', 'cart-wrapper']
@@ -73,22 +83,22 @@ class Cart extends Component {
     return (
       <div className={ panelClasses.join(' ') }>
         <div className="panel-heading cart-heading" onClick={ this.onHeaderClick }>
-          <span className="cart-heading--items">{ this.props.itemCount }</span>
+          <span className="cart-heading--items">{ itemCount }</span>
           <span className="cart-heading--total"><i className={ toggled ? "glyphicon glyphicon-chevron-up" : "glyphicon glyphicon-chevron-down"}></i></span>
           Ma commande
         </div>
         <div className="panel-body">
           {
-            !this.props.noDatePicker && (<div><DatePicker /><hr/></div>)
+            !noDatePicker && (<div><DatePicker /><hr/></div>)
           }
-          { this.props.cartItems.length > 0 ? this.renderCartItems(): (
+          { cartItems.length > 0 ? this.renderCartItems(): (
             <Alert bsStyle="warning">Votre panier est vide</Alert>
           ) }
           <hr />
           <p>
-            <strong>Total : { this.props.total } €</strong>
+            <strong>Total : { total } €</strong>
           </p>
-          { !this.props.readonly && this.renderButton() }
+          { !readonly && this.renderButton() }
         </div>
       </div>
     )
@@ -97,6 +107,7 @@ class Cart extends Component {
 
 function mapStateToProps(state, props) {
   return {
+    cartLastItem: state.cartLastItem,
     cartItems: state.cartItems,
     total: cartTotal(state.cartItems),
     itemCount: cartCountItems(state.cartItems),
