@@ -1,61 +1,62 @@
+import Client from './client';
+
 import React from 'react';
 import { render } from 'react-dom';
 import Modal from 'react-modal';
 import Root from './app';
-import Client from './client';
 
 import 'react-hot-loader/patch';
 import { AppContainer } from 'react-hot-loader';
 
-const modalStyle = {
-  overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.75)'
-  },
-  content : {
-    top           : '20px',
-    left          : '20px',
-    right         : '20px',
-    bottom        : '20px',
-    padding       : 0,
-    borderRadius  : 0
-  }
-};
-
-const renderApp = (el, isOpen, baseURL, restaurantId, stripePublishableKey) => {
-
-  render(
-    <AppContainer>
-      <Modal isOpen={ isOpen } contentLabel="Commander" style={ modalStyle }>
-        <Root
-          baseURL={ baseURL }
-          restaurantId={ restaurantId }
-          stripePublishableKey={ stripePublishableKey }
-          onClose={ () => renderApp(el, false, baseURL, restaurantId, stripePublishableKey) }
-          isOpen={ isOpen } />
-      </Modal>
-    </AppContainer>,
-    el);
-
-  if (module.hot) {
-    module.hot.accept('./app.js', () => {
-      const NextRoot = require('./app.js').default;
-      render(
-        <Modal isOpen={isOpen} contentLabel="Commander" style={modalStyle}>
-          <NextRoot
-            baseURL={baseURL}
-            restaurantId={restaurantId}
-            stripePublishableKey={stripePublishableKey}
-            onClose={() => renderApp(el, false, baseURL, restaurantId, stripePublishableKey)}
-            isOpen={isOpen}/>
-        </Modal>,
-        el);
-    });
-  }
-}
-
 if (typeof window !== 'undefined') {
 
   require('./styles/index.scss')
+
+  const modalStyle = {
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.75)'
+    },
+    content : {
+      top           : '20px',
+      left          : '20px',
+      right         : '20px',
+      bottom        : '20px',
+      padding       : 0,
+      borderRadius  : 0
+    }
+  };
+
+  const renderApp = (el, isOpen, baseURL, restaurantId, stripePublishableKey) => {
+
+    render(
+      <AppContainer>
+        <Modal isOpen={ isOpen } contentLabel="Commander" style={ modalStyle }>
+          <Root
+            baseURL={ baseURL }
+            restaurantId={ restaurantId }
+            stripePublishableKey={ stripePublishableKey }
+            onClose={ () => renderApp(el, false, baseURL, restaurantId, stripePublishableKey) }
+            isOpen={ isOpen } />
+        </Modal>
+      </AppContainer>,
+      el);
+
+    if (module.hot) {
+      module.hot.accept('./app.js', () => {
+        const NextRoot = require('./app.js').default;
+        render(
+          <Modal isOpen={isOpen} contentLabel="Commander" style={modalStyle}>
+            <NextRoot
+              baseURL={baseURL}
+              restaurantId={restaurantId}
+              stripePublishableKey={stripePublishableKey}
+              onClose={() => renderApp(el, false, baseURL, restaurantId, stripePublishableKey)}
+              isOpen={isOpen}/>
+          </Modal>,
+          el);
+      });
+    }
+  }
 
   const el = document.querySelector('[rel="coopcycle"]');
 
