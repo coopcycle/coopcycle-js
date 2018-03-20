@@ -1,4 +1,3 @@
-require('./styles/index.scss')
 import React from 'react';
 import { render } from 'react-dom';
 import Modal from 'react-modal';
@@ -55,6 +54,8 @@ const renderApp = (el, isOpen, baseURL, restaurantId, stripePublishableKey) => {
 }
 
 if (typeof window !== 'undefined') {
+
+  require('./styles/index.scss')
 
   const el = document.querySelector('[rel="coopcycle"]');
 
