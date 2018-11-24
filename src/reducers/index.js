@@ -45,6 +45,8 @@ const cartAddress = (state = null, action) => {
       return action.address['@id'];
     case 'RESET_CHECKOUT':
       return null;
+    case 'COMPLETE_ADDRESS':
+      return Object.assign({}, state, action.address)
     case 'DISCONNECT':
       if (state) {
         const isNewAddress = !state.hasOwnProperty('@id')
